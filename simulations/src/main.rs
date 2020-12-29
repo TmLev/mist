@@ -1,3 +1,5 @@
+extern crate mist;
+
 fn main() {
-    println!("Hello, world!");
+    mist::works();
 }
