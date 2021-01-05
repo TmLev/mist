@@ -1,3 +1,1 @@
-pub fn works() {
-    println!("extern crate dependency works");
-}
+mod vms;
