@@ -12,3 +12,12 @@ impl Vm {
         }
     }
 }
+
+impl Default for Vm {
+    fn default() -> Vm {
+        Vm {
+            cpu: 4,
+            ram: 2048,
+        }
+    }
+}
