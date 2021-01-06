@@ -1,3 +1,4 @@
 fn main() {
-    mist::works();
+    let vm = mist::Vm::default();
+    println!("{:?}", vm);
 }
