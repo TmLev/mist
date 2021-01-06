@@ -1,5 +1,5 @@
 #[derive(Debug)]
-struct Vm {
+pub struct Vm {
     cpu: u32,
     ram: u32,
 }
