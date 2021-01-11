@@ -1,3 +1,2 @@
-pub use crate::vms::vm::Vm;
-
-mod vms;
+pub(crate) mod vm;
+pub use crate::vm::Vm;
