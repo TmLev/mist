@@ -8,8 +8,4 @@ edition = "2018"
 name = "mist"
 path = "src/lib.rs"
 
-[[bin]]
-name = "simulations"
-path = "src/simulations.rs"
-
 [dependencies]
