@@ -9,3 +9,5 @@ name = "mist"
 path = "src/lib.rs"
 
 [dependencies]
+actix = "0.11.0-beta.1"
+actix-rt = "2.0.0-beta.1"
