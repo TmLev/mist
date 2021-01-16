@@ -1,16 +1,21 @@
-use crate::ExternalProvider;
+use actix::prelude::*;
+
+use crate::providers::external::ExternalProvider;
+use crate::providers::proto::Request;
 
 #[derive(Debug)]
-pub struct ServiceProvider<'ep> {
-     public_cloud: Vec<&'ep ExternalProvider>,
+pub struct ServiceProvider {
+     eps: Vec<Addr<ExternalProvider>>,
 }
 
-impl<'ep> ServiceProvider<'ep> {
-     pub fn new(public_cloud: Vec<&'ep ExternalProvider>) -> ServiceProvider {
-          ServiceProvider { public_cloud }
+impl ServiceProvider {
+     pub fn new(eps: Vec<Addr<ExternalProvider>>) -> ServiceProvider {
+          ServiceProvider { eps }
      }
 
-     pub fn public_cloud(&self) -> &[&'ep ExternalProvider] {
-          &self.public_cloud
+     pub async fn request(&self) -> usize {
+          let first = &self.eps[0];
+          let res = first.send(Request(123usize)).await;
+          res.unwrap()
      }
 }
