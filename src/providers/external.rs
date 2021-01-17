@@ -1,9 +1,9 @@
 use actix::prelude::*;
 
 use crate::vm::Vm;
-use crate::providers::proto::{
-    Request,
-};
+use crate::providers::proto::InstanceTypesRequest;
+use crate::proto::InstanceTypesResponse;
+use actix::dev::MessageResponse;
 
 #[derive(Debug)]
 pub struct ExternalProvider {
@@ -15,8 +15,8 @@ impl ExternalProvider {
         ExternalProvider { instance_types }
     }
 
-    pub fn instance_types(&self) -> &[Vm] {
-        &self.instance_types
+    pub fn instance_types(&self) -> Vec<Vm> {
+        self.instance_types.clone()
     }
 }
 
@@ -24,10 +24,10 @@ impl Actor for ExternalProvider {
     type Context = Context<Self>;
 }
 
-impl Handler<Request> for ExternalProvider {
-    type Result = usize;
+impl Handler<InstanceTypesRequest> for ExternalProvider {
+    type Result = MessageResult<InstanceTypesRequest>;
 
-    fn handle(&mut self, msg: Request, _ctx: &mut Context<Self>) -> Self::Result {
-        msg.0 + 1
+    fn handle(&mut self, msg: InstanceTypesRequest, _ctx: &mut Context<Self>) -> Self::Result {
+        MessageResult(InstanceTypesResponse { types: self.instance_types() })
     }
 }

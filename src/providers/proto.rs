@@ -1,13 +1,11 @@
 use actix::prelude::*;
 
-#[derive(Message)]
-#[rtype(result = "usize")]
-pub struct Request(pub usize);
+use crate::vm::Vm;
 
 #[derive(Message)]
-#[rtype(result = "usize")]
-pub struct Response(pub usize);
+#[rtype(result = "InstanceTypesResponse")]
+pub struct InstanceTypesRequest(pub ());
 
-#[derive(Message)]
-#[rtype(result = "usize")]
-pub struct Dummy(pub usize);
+pub struct InstanceTypesResponse {
+    pub types: Vec<Vm>,
+}

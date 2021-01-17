@@ -18,9 +18,8 @@ async fn main() -> () {
     ).start();
 
     let sp = ServiceProvider::new(vec![ep_addr.clone()]);
-    let res = sp.request().await;
-    println!("RESULT: {}", res);
-    assert_eq!(res, 124);
+    let instance_types = sp.request_instance_types(&sp.eps[0]).await;
+    println!("RESULT: {:?}", instance_types);
 
     System::current().stop();
 }

@@ -1,4 +1,5 @@
 #[derive(Debug)]
+#[derive(Clone)]
 pub struct Vm {
     cpu: u32,
     ram: u32,
