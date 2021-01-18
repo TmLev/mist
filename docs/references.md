@@ -6,7 +6,7 @@ Mist would never have happened without the following notable works:
    “Allocation of virtual machines in cloud data centers — a
    survey of problem models and optimization algorithms”
 1. R. Van den Bossche, K. Vanmechelen, and J. Broeckhove, 
-   “Online costefficient scheduling of deadline-constrained workloads 
+   “Online cost-efficient scheduling of deadline-constrained workloads 
    on hybrid clouds”
 1. A. Das, A. Leaf, C. A. Varela, and S. Patterson,
    “Skedulix: Hybrid cloud scheduling for cost-efficient execution of 
