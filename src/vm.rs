@@ -7,18 +7,12 @@ pub struct Vm {
 
 impl Vm {
     pub fn new(cpu: u32, ram: u32) -> Vm {
-        Vm {
-            cpu,
-            ram,
-        }
+        Vm { cpu, ram }
     }
 }
 
 impl Default for Vm {
     fn default() -> Vm {
-        Vm {
-            cpu: 4,
-            ram: 2048,
-        }
+        Vm { cpu: 4, ram: 2048 }
     }
 }

@@ -1,3 +1,3 @@
 pub(crate) mod external;
-pub(crate) mod service;
 pub mod proto;
+pub(crate) mod service;
