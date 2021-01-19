@@ -1,9 +1,9 @@
 use actix::prelude::*;
 
-use crate::vm::Vm;
-use crate::providers::proto::InstanceTypesRequest;
 use crate::proto::InstanceTypesResponse;
-use actix::dev::MessageResponse;
+use crate::providers::proto::InstanceTypesRequest;
+use crate::vm::Vm;
+use std::time::Duration;
 
 #[derive(Debug)]
 pub struct ExternalProvider {
@@ -27,7 +27,10 @@ impl Actor for ExternalProvider {
 impl Handler<InstanceTypesRequest> for ExternalProvider {
     type Result = MessageResult<InstanceTypesRequest>;
 
-    fn handle(&mut self, msg: InstanceTypesRequest, _ctx: &mut Context<Self>) -> Self::Result {
-        MessageResult(InstanceTypesResponse { types: self.instance_types() })
+    fn handle(&mut self, _msg: InstanceTypesRequest, _ctx: &mut Context<Self>) -> Self::Result {
+        std::thread::sleep(Duration::from_secs(2));
+        MessageResult(InstanceTypesResponse {
+            types: self.instance_types(),
+        })
     }
 }
