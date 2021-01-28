@@ -5,7 +5,21 @@ use crate::providers::proto::InstanceTypesRequest;
 use crate::vm::Vm;
 use std::time::Duration;
 
-pub type InstanceTypes = Vec<Vm>;
+pub type Cost = f64;
+
+#[derive(Debug, Clone)]
+pub struct InstanceType {
+    vm: Vm,
+    cost: Cost,
+}
+
+impl InstanceType {
+    pub fn new(vm: Vm, cost: Cost) -> Self {
+        Self { vm, cost }
+    }
+}
+
+pub type InstanceTypes = Vec<InstanceType>;
 
 #[derive(Debug)]
 pub struct ExternalProvider {
@@ -13,11 +27,11 @@ pub struct ExternalProvider {
 }
 
 impl ExternalProvider {
-    pub fn new(instance_types: Vec<Vm>) -> ExternalProvider {
+    pub fn new(instance_types: InstanceTypes) -> ExternalProvider {
         ExternalProvider { instance_types }
     }
 
-    pub fn instance_types(&self) -> Vec<Vm> {
+    pub fn instance_types(&self) -> InstanceTypes {
         self.instance_types.clone()
     }
 }
