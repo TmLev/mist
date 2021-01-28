@@ -6,13 +6,13 @@ pub struct Vm {
 }
 
 impl Vm {
-    pub fn new(cpu: u32, ram: u32) -> Vm {
-        Vm { cpu, ram }
+    pub fn new(cpu: u32, ram: u32) -> Self {
+        Self { cpu, ram }
     }
 }
 
 impl Default for Vm {
-    fn default() -> Vm {
-        Vm { cpu: 4, ram: 2048 }
+    fn default() -> Self {
+        Self { cpu: 4, ram: 2048 }
     }
 }
