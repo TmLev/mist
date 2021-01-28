@@ -5,9 +5,11 @@ use crate::providers::proto::InstanceTypesRequest;
 use crate::vm::Vm;
 use std::time::Duration;
 
+pub type InstanceTypes = Vec<Vm>;
+
 #[derive(Debug)]
 pub struct ExternalProvider {
-    instance_types: Vec<Vm>,
+    instance_types: InstanceTypes,
 }
 
 impl ExternalProvider {
@@ -29,8 +31,6 @@ impl Handler<InstanceTypesRequest> for ExternalProvider {
 
     fn handle(&mut self, _msg: InstanceTypesRequest, _ctx: &mut Context<Self>) -> Self::Result {
         std::thread::sleep(Duration::from_secs(2));
-        MessageResult(InstanceTypesResponse {
-            types: self.instance_types(),
-        })
+        MessageResult(InstanceTypesResponse(self.instance_types()))
     }
 }

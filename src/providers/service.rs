@@ -1,8 +1,7 @@
 use actix::prelude::*;
 
 use crate::proto::InstanceTypesRequest;
-use crate::providers::external::ExternalProvider;
-use crate::Vm;
+use crate::providers::external::{ExternalProvider, InstanceTypes};
 
 #[derive(Debug)]
 pub struct ServiceProvider {
@@ -14,7 +13,7 @@ impl ServiceProvider {
         ServiceProvider { eps }
     }
 
-    pub async fn request_instance_types(&self, ep_addr: &Addr<ExternalProvider>) -> Vec<Vm> {
-        ep_addr.send(InstanceTypesRequest(())).await.unwrap().types
+    pub async fn request_instance_types(&self, ep_addr: &Addr<ExternalProvider>) -> InstanceTypes {
+        ep_addr.send(InstanceTypesRequest(())).await.unwrap().0
     }
 }

@@ -1,11 +1,9 @@
 use actix::prelude::*;
 
-use crate::vm::Vm;
+use crate::providers::external::InstanceTypes;
 
 #[derive(Message)]
 #[rtype(result = "InstanceTypesResponse")]
 pub struct InstanceTypesRequest(pub ());
 
-pub struct InstanceTypesResponse {
-    pub types: Vec<Vm>,
-}
+pub struct InstanceTypesResponse(pub InstanceTypes);
