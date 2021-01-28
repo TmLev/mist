@@ -1,14 +1,14 @@
 use actix::prelude::*;
 
-use mist::{ExternalProvider, ServiceProvider, Vm};
+use mist::{Cost, ExternalProvider, InstanceType, ServiceProvider, Vm};
 
 #[actix_rt::main]
 async fn main() -> () {
     let ep_addr = ExternalProvider::new(vec![
-        Vm::new(2, 1024),
-        Vm::new(4, 2048),
-        Vm::new(8, 2048),
-        Vm::new(8, 4096),
+        InstanceType::new(Vm::new(2, 1024), 10.0),
+        InstanceType::new(Vm::new(4, 2048), 20.0),
+        InstanceType::new(Vm::new(8, 2048), 30.0),
+        InstanceType::new(Vm::new(8, 4096), 40.0),
     ])
     .start();
 
