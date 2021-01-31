@@ -1,7 +1,8 @@
-pub(crate) mod vm;
-pub use crate::vm::Vm;
+pub(crate) mod vms;
+pub use crate::vms::Vm;
 
-pub(crate) mod task;
+pub(crate) mod applications;
+pub(crate) mod tasks;
 
 pub(crate) mod providers;
 pub use crate::providers::{

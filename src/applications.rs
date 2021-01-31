@@ -1,12 +1,6 @@
-pub type Deadline = i64;
+use crate::tasks::Tasks;
 
 #[derive(Debug, Clone)]
-struct Task {
-    deadline: Deadline,
-}
-
-pub type Tasks = Vec<Task>;
-
 enum ApplicationStatus {
     Schedulable,
     Unfeasible,

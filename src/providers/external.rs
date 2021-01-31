@@ -2,7 +2,7 @@ use actix::prelude::*;
 
 use crate::proto::InstanceTypesResponse;
 use crate::providers::proto::InstanceTypesRequest;
-use crate::vm::Vm;
+use crate::vms::Vm;
 use std::time::Duration;
 
 pub type Cost = f64;

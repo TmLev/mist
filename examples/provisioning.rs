@@ -1,6 +1,6 @@
 use actix::prelude::*;
 
-use mist::{Cost, ExternalProvider, InstanceType, ServiceProvider, Vm};
+use mist::{ExternalProvider, InstanceType, ServiceProvider, Vm};
 
 #[actix_rt::main]
 async fn main() -> () {
