@@ -1,9 +1,10 @@
+use std::time::Duration;
+
 use actix::prelude::*;
 
 use crate::proto::InstanceTypesResponse;
 use crate::providers::proto::InstanceTypesRequest;
 use crate::vms::Vm;
-use std::time::Duration;
 
 pub type Cost = f64;
 
