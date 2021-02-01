@@ -5,3 +5,4 @@ target
 
 ## Files
 .DS_Store
+Cargo.lock
