@@ -1,7 +1,6 @@
-use actix::prelude::*;
-
 use crate::proto::InstanceTypesRequest;
-use crate::providers::external::{ExternalProvider, InstanceTypes};
+use crate::providers::external::ExternalProvider;
+use crate::vms::InstanceTypes;
 
 #[derive(Debug)]
 pub struct ServiceProvider {

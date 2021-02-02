@@ -1,3 +1,5 @@
+use rusty_money::{iso::USD, Money};
+
 #[derive(Debug, Clone)]
 pub struct Vm {
     cpu: u32,
@@ -16,7 +18,7 @@ impl Default for Vm {
     }
 }
 
-pub type Cost = f64;
+pub type Cost = Money<'static, USD>;
 
 #[derive(Debug, Clone)]
 pub struct InstanceType {
