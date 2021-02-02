@@ -15,3 +15,19 @@ impl Default for Vm {
         Self { cpu: 4, ram: 2048 }
     }
 }
+
+pub type Cost = f64;
+
+#[derive(Debug, Clone)]
+pub struct InstanceType {
+    vm: Vm,
+    cost: Cost,
+}
+
+impl InstanceType {
+    pub fn new(vm: Vm, cost: Cost) -> Self {
+        Self { vm, cost }
+    }
+}
+
+pub type InstanceTypes = Vec<InstanceType>;

@@ -7,7 +7,7 @@ async fn main() -> () {
         InstanceType::new(Vm::new(8, 2048), 30.0),
         InstanceType::new(Vm::new(8, 4096), 40.0),
     ])
-        .start();
+    .start();
 
     let sp = ServiceProvider::new(vec![ep_addr.clone()]);
     let instance_types = sp.request_instance_types(&sp.eps[0]).await;
