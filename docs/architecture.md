@@ -14,5 +14,4 @@
 ## Interactions
 
 Some entities (mostly, providers) are able to communicate with one another. 
-For that to be possible, an entity must implement `Actor` trait, since Mist 
-incorporates actor model.
+Currently, this is achieved with `stakker`'s `call!` macros.
