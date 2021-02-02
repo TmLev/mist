@@ -10,3 +10,4 @@ path = "src/lib.rs"
 
 [dependencies]
 stakker = "=0.2.0"
+rusty-money = "0.4.1"
