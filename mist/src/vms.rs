@@ -1,4 +1,4 @@
-use rusty_money::{iso::USD, Money};
+use rusty_money::{iso::Currency, Money};
 
 #[derive(Debug, Clone)]
 pub struct Vm {
@@ -18,7 +18,7 @@ impl Default for Vm {
     }
 }
 
-pub type Cost = Money<'static, USD>;
+pub type Cost = Money<'static, Currency>;
 
 #[derive(Debug, Clone)]
 pub struct InstanceType {
