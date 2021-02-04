@@ -6,3 +6,4 @@ edition = "2018"
 
 [dependencies]
 mist = { path = "../mist" }
+stakker = "=0.2.0"
