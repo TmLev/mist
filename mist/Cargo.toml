@@ -9,5 +9,6 @@ name = "mist"
 path = "src/lib.rs"
 
 [dependencies]
-stakker = "=0.2.0"
-rusty-money = "0.4.1"
+stakker = "=0.2.0"     # Actor model
+rusty-money = "0.4.1"  # VM pricing
+serde_json = "1.0"     # Data parsing
