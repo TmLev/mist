@@ -8,7 +8,7 @@ pub struct ServiceProvider {
 }
 
 impl ServiceProvider {
-    pub fn init(cx: CX![], eps: Vec<Actor<ExternalProvider>>) -> Option<ServiceProvider> {
+    pub fn init(cx: CX![], eps: Vec<Actor<ExternalProvider>>) -> Option<Self> {
         println!("SP: init start");
         let ep = eps[0].clone();
         println!("SP: before call!-ing request");
