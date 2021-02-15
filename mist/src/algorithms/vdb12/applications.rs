@@ -1,13 +1,13 @@
-use crate::tasks::Tasks;
+use crate::algorithms::vdb12::tasks::Task;
 
 #[derive(Debug, Clone)]
-pub enum ApplicationStatus {
+pub enum Status {
     Schedulable,
     Unfeasible,
 }
 
 #[derive(Debug, Clone)]
 pub struct Application {
-    tasks: Tasks,
-    status: ApplicationStatus,
+    tasks: Vec<Task>,
+    status: Status,
 }
