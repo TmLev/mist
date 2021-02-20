@@ -29,6 +29,7 @@ impl Application {
 
     pub fn add_tasks(&mut self, tasks: Vec<Task>) {
         self.tasks.extend(tasks);
+        self.tasks.sort();
     }
 
     pub fn to_json(&self) -> String {
