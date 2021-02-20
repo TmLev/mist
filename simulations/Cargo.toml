@@ -7,6 +7,7 @@ edition = "2018"
 [dependencies]
 mist = { path = "../mist" }
 stakker = "=0.2.0"
+uuid = { version = "0.8", features = ["serde", "v4"] }
 
 [[bin]]
 name = "actors"
