@@ -2,7 +2,7 @@ use std::time::{Duration, Instant};
 
 use stakker::{actor, after, call, ret, ret_nop, ret_some_to, Actor, Ret, Stakker, CX};
 
-use mist::rusty_money::{iso::Currency, iso::USD, Money};
+use rusty_money::{iso::Currency, iso::USD, Money};
 
 #[derive(Debug, Clone)]
 struct Vm {
