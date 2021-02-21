@@ -8,11 +8,4 @@ edition = "2018"
 mist = { path = "../mist" }
 stakker = "=0.2.0"
 uuid = { version = "0.8", features = ["serde", "v4"] }
-
-[[bin]]
-name = "actors"
-path = "src/bin/actors.rs"
-
-[[bin]]
-name = "workspace-env"
-path = "src/bin/workspace_env.rs"
+rusty-money = "0.4.1"
