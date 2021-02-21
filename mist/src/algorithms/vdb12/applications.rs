@@ -5,26 +5,14 @@ use crate::algorithms::vdb12::tasks::Task;
 
 #[derive(Debug, Clone)]
 #[derive(Deserialize, Serialize)]
-pub enum Status {
-    Schedulable,
-    Unfeasible,
-}
-
-#[derive(Debug, Clone)]
-#[derive(Deserialize, Serialize)]
 pub struct Application {
-    uuid: Uuid,
-    status: Status,
-    tasks: Vec<Task>,
+    pub uuid: Uuid,
+    pub tasks: Vec<Task>,
 }
 
 impl Application {
-    pub fn new(uuid: Uuid, status: Status, tasks: Vec<Task>) -> Self {
-        Self {
-            uuid,
-            status,
-            tasks,
-        }
+    pub fn new(uuid: Uuid, tasks: Vec<Task>) -> Self {
+        Self { uuid, tasks }
     }
 
     pub fn add_tasks(&mut self, tasks: Vec<Task>) {
@@ -41,7 +29,6 @@ impl Default for Application {
     fn default() -> Self {
         Self {
             uuid: Uuid::new_v4(),
-            status: Status::Schedulable,
             tasks: vec![],
         }
     }

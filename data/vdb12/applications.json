@@ -1,7 +1,6 @@
 [
   {
     "uuid": "c159b092-08e7-466a-964c-2d7fbc6294ed",
-    "status": "Schedulable",
     "tasks": [
       {
         "deadline": "2021-04-18T19:45:10.397543Z"
@@ -13,7 +12,6 @@
   },
   {
     "uuid": "cdbab53e-b5f0-467b-91ee-d9d40009200d",
-    "status": "Schedulable",
     "tasks": [
       {
         "deadline": "2021-04-18T19:45:10.397558Z"
