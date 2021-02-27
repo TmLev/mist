@@ -1,5 +1,5 @@
-use mist::algorithms::vdb12::applications::Application;
-use mist::algorithms::vdb12::tasks::Task;
+use mist::vdb12::Application;
+use mist::vdb12::Task;
 
 fn main() {
     let mut app1 = Application::default();
