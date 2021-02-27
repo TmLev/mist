@@ -1,0 +1,42 @@
+[
+  {
+    "vm": {
+      "cpu": 1,
+      "mem": 1000
+    },
+    "price": 0.095,
+    "billing_period": 3600.0
+  },
+  {
+    "vm": {
+      "cpu": 2,
+      "mem": 2000
+    },
+    "price": 0.38,
+    "billing_period": 3600.0
+  },
+  {
+    "vm": {
+      "cpu": 4,
+      "mem": 4000
+    },
+    "price": 0.76,
+    "billing_period": 3600.0
+  },
+  {
+    "vm": {
+      "cpu": 8,
+      "mem": 8000
+    },
+    "price": 1.52,
+    "billing_period": 3600.0
+  },
+  {
+    "vm": {
+      "cpu": 16,
+      "mem": 16000
+    },
+    "price": 3.04,
+    "billing_period": 3600.0
+  }
+]
