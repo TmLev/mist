@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 use std::time::Duration;
 
 #[derive(Debug, Clone)]
+#[derive(Ord, PartialOrd, Eq, PartialEq)]
 #[derive(Deserialize, Serialize)]
 pub struct Vm {
     // Number of virtual CPU cores
@@ -11,17 +12,21 @@ pub struct Vm {
     pub mem: u32,
 }
 
+pub type Price = f64;
+pub type BillingPeriod = f64;
+pub type Cost = f64; // price * billing_period
+
 #[derive(Debug, Clone)]
 #[derive(Deserialize, Serialize)]
 pub struct InstanceType {
     // VM characteristics
     pub vm: Vm,
 
-    // Price in USD
-    pub price: f64,
+    // Price per `billing_period` in USD
+    pub price: Price,
 
     // Interval of time between billings in seconds
-    pub billing_period: f64,
+    pub billing_period: BillingPeriod,
 }
 
 impl InstanceType {
