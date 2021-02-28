@@ -1,4 +1,3 @@
-use crate::vdb12::providers::ScheduleCost::{Impossible, Possible};
 use crate::vdb12::vms::Cost;
 use crate::vdb12::{Application, InstanceType};
 
@@ -31,12 +30,12 @@ impl PublicCloudProvider {
                 .min_by_key(|&instance_type| instance_type.price);
 
             total += match cheapest_instance_type {
-                None => return Impossible,
+                None => return ScheduleCost::Impossible,
                 Some(instance_type) => instance_type.price,
             };
         }
 
-        Possible(total)
+        ScheduleCost::Possible(total)
     }
 
     pub fn schedule(&mut self, application: &Application) {}
