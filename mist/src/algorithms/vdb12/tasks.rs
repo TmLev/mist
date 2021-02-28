@@ -3,21 +3,28 @@ use std::cmp::Ordering;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
+use crate::vdb12::Vm;
+
 #[derive(Debug, Clone)]
 #[derive(Deserialize, Serialize)]
 pub struct Task {
-    deadline: DateTime<Utc>,
+    pub minimal_vm_requirements: Vm,
+    pub deadline: DateTime<Utc>,
 }
 
 impl Task {
-    pub fn new(deadline: DateTime<Utc>) -> Self {
-        Self { deadline }
+    pub fn new(minimal_vm_requirements: Vm, deadline: DateTime<Utc>) -> Self {
+        Self {
+            minimal_vm_requirements,
+            deadline,
+        }
     }
 }
 
 impl Default for Task {
     fn default() -> Self {
         Self {
+            minimal_vm_requirements: Vm { cpu: 1, mem: 1000 },
             deadline: Utc::now(),
         }
     }
