@@ -5,7 +5,7 @@
       "mem": 1000
     },
     "price": 0.095,
-    "billing_period": 3600.0
+    "billing_interval": 3600.0
   },
   {
     "vm": {
@@ -13,7 +13,7 @@
       "mem": 2000
     },
     "price": 0.38,
-    "billing_period": 3600.0
+    "billing_interval": 3600.0
   },
   {
     "vm": {
@@ -21,7 +21,7 @@
       "mem": 4000
     },
     "price": 0.76,
-    "billing_period": 3600.0
+    "billing_interval": 3600.0
   },
   {
     "vm": {
@@ -29,7 +29,7 @@
       "mem": 8000
     },
     "price": 1.52,
-    "billing_period": 3600.0
+    "billing_interval": 3600.0
   },
   {
     "vm": {
@@ -37,6 +37,6 @@
       "mem": 16000
     },
     "price": 3.04,
-    "billing_period": 3600.0
+    "billing_interval": 3600.0
   }
 ]
