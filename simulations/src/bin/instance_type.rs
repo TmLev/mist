@@ -5,7 +5,7 @@ fn main() {
     let it = InstanceType {
         vm,
         price: 0.0085,
-        billing_period: 60.0 * 60.0,
+        billing_interval: 60.0 * 60.0,
     };
     println!("{}", it.to_json().unwrap());
 

@@ -13,7 +13,7 @@ pub struct Vm {
 }
 
 pub type Price = f64;
-pub type BillingPeriod = f64;
+pub type BillingInterval = f64;
 pub type Cost = f64; // price * billing_period
 
 #[derive(Debug, Clone)]
@@ -26,7 +26,7 @@ pub struct InstanceType {
     pub price: Price,
 
     // Interval of time between billings in seconds
-    pub billing_period: BillingPeriod,
+    pub billing_interval: BillingInterval,
 }
 
 impl InstanceType {
