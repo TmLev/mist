@@ -1,5 +1,4 @@
-use crate::vdb12::vms::Cost;
-use crate::vdb12::{Application, InstanceType};
+use crate::vdb12::{Application, Cost, InstanceType};
 
 pub enum ScheduleCost {
     Impossible,
