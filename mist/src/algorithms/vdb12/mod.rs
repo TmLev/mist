@@ -6,5 +6,6 @@ mod tasks;
 mod vms;
 
 pub use applications::Application;
+pub use providers::{PublicProvider, ScheduleCost};
 pub use tasks::Task;
 pub use vms::{BillingInterval, Cost, InstanceType, Price, Vm};
