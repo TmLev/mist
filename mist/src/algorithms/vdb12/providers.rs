@@ -15,7 +15,7 @@ impl PublicProvider {
     }
 
     pub fn cost(&self, application: &Application) -> ScheduleCost {
-        let mut total = Cost(0);
+        let mut total = 0.0;
 
         for task in application.tasks.iter() {
             // FIXME(TmLev):
@@ -26,7 +26,7 @@ impl PublicProvider {
                 .instance_types
                 .iter()
                 .filter(|&instance_type| instance_type.vm >= task.minimal_vm_requirements)
-                .min_by_key(|&instance_type| instance_type.price);
+                .min_by(|&left, &right| left.price.partial_cmp(&right.price).unwrap());
 
             total += match cheapest_instance_type {
                 None => return ScheduleCost::Impossible,
