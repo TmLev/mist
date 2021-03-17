@@ -5,11 +5,11 @@ pub enum ScheduleCost {
     Possible(Cost),
 }
 
-pub struct PublicCloudProvider {
+pub struct PublicProvider {
     instance_types: Vec<InstanceType>,
 }
 
-impl PublicCloudProvider {
+impl PublicProvider {
     pub fn new(instance_types: Vec<InstanceType>) -> Self {
         Self { instance_types }
     }
