@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
-use crate::algorithms::vdb12::tasks::Task;
+use crate::vdb12::Task;
 
 #[derive(Debug, Clone)]
 #[derive(Deserialize, Serialize)]
