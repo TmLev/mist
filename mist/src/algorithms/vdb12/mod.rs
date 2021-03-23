@@ -1,11 +1,9 @@
 mod applications;
 mod providers;
-mod queues;
 mod schedulers;
-mod tasks;
 mod vms;
 
-pub use applications::Application;
+pub use applications::{Application, Deadline, Task};
 pub use providers::{PublicProvider, ScheduleCost};
-pub use tasks::Task;
+pub use schedulers::policies;
 pub use vms::{BillingInterval, Cost, InstanceType, Price, Vm};
