@@ -5,15 +5,17 @@ use serde::{Deserialize, Serialize};
 
 use crate::vdb12::Vm;
 
+pub type Deadline = DateTime<Utc>;
+
 #[derive(Debug, Clone)]
 #[derive(Deserialize, Serialize)]
 pub struct Task {
     pub minimal_vm_requirements: Vm,
-    pub deadline: DateTime<Utc>,
+    pub deadline: Deadline,
 }
 
 impl Task {
-    pub fn new(minimal_vm_requirements: Vm, deadline: DateTime<Utc>) -> Self {
+    pub fn new(minimal_vm_requirements: Vm, deadline: Deadline) -> Self {
         Self {
             minimal_vm_requirements,
             deadline,
