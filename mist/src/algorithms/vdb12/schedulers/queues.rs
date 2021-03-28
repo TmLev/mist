@@ -14,7 +14,7 @@ where
     fn push(&mut self, element: Element, priority: Priority) -> Option<Priority>;
     fn pop(&mut self) -> Option<(Element, Priority)>;
     fn len(&self) -> usize;
-    fn iter(&self) -> KeyedPriorityQueueBorrowIter<TKey, TPriority, S>;
+    fn iter(&self) -> KeyedPriorityQueueBorrowIter<Element, Priority>;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ impl PriorityQueue<Application, Deadline> for EarliestDeadlineFirst {
         self.queue.len()
     }
 
-    fn iter(&self) -> KeyedPriorityQueueBorrowIter<TKey, TPriority, S> {
+    fn iter(&self) -> KeyedPriorityQueueBorrowIter<Application, Deadline> {
         self.queue.iter()
     }
 }
@@ -79,7 +79,7 @@ impl PriorityQueue<Application, usize> for FirstComeFirstServed {
         self.queue.len()
     }
 
-    fn iter(&self) -> KeyedPriorityQueueBorrowIter<TKey, TPriority, S> {
+    fn iter(&self) -> KeyedPriorityQueueBorrowIter<Application, usize> {
         self.queue.iter()
     }
 }
