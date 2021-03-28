@@ -17,6 +17,7 @@ impl Application {
 
     pub fn add_tasks(&mut self, tasks: Vec<Task>) {
         self.tasks.extend(tasks);
+        // TODO(TmLev): What? Scheduler should sort applications, but what about tasks?
         self.tasks.sort();
     }
 
