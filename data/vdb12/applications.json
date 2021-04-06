@@ -1,23 +1,31 @@
 [
   {
     "uuid": "c159b092-08e7-466a-964c-2d7fbc6294ed",
+    "deadline": "2021-04-18T19:45:10.397543Z",
     "tasks": [
       {
-        "deadline": "2021-04-18T19:45:10.397543Z"
+        "minimal_vm_requirements": {
+          "cpu": 2,
+          "mem": 2000
+        }
       },
       {
-        "deadline": "2021-04-18T19:45:10.397554Z"
+        "minimal_vm_requirements": {
+          "cpu": 1,
+          "mem": 1000
+        }
       }
     ]
   },
   {
     "uuid": "cdbab53e-b5f0-467b-91ee-d9d40009200d",
+    "deadline": "2021-04-18T19:45:10.397558Z",
     "tasks": [
       {
-        "deadline": "2021-04-18T19:45:10.397558Z"
-      },
-      {
-        "deadline": "2021-04-18T19:45:10.397558Z"
+        "minimal_vm_requirements": {
+          "cpu": 4,
+          "mem": 2000
+        }
       }
     ]
   }
