@@ -27,12 +27,22 @@ pub struct Application {
 }
 
 impl Application {
-    pub fn new(uuid: Uuid, tasks: Vec<Task>, deadline: Deadline) -> Self {
+    pub fn new(tasks: Vec<Task>, deadline: Deadline) -> Self {
         Self {
-            uuid,
+            uuid: Uuid::new_v4(),
             tasks,
             deadline,
         }
+    }
+
+    // Builder pattern.
+    pub fn with_uuid(mut self, uuid: Uuid) -> Self {
+        self.uuid = uuid;
+        self
+    }
+
+    pub fn to_json(&self) -> String {
+        serde_json::to_string_pretty(&self).unwrap()
     }
 }
 
