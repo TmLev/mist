@@ -1,24 +1,34 @@
-use super::queues::PriorityQueue;
-use crate::vdb12::{
-    policies::{CheapestToPublic, UnfeasiblePolicy, UnfeasibleToPublic},
-    Application, InstanceType,
-};
+use std::collections::VecDeque;
+
+use crate::vdb12::{Application, InstanceType};
+
+enum QueueSortingPolicy {
+    FirstComeFirstServed,
+    EarliestDeadlineFirst,
+}
+
+enum UnfeasiblePolicy {
+    CheapestToPublic,
+    UnfeasibleToPublic,
+}
 
 struct HybridScheduler {
     private_instance_types: Vec<InstanceType>,
-    application_queue: Box<dyn PriorityQueue>,
-    unfeasible_policy: Box<dyn UnfeasiblePolicy>,
+    application_queue: VecDeque<Application>,
+    queue_sorting_policy: QueueSortingPolicy,
+    unfeasible_policy: UnfeasiblePolicy,
 }
 
 impl HybridScheduler {
     pub fn new(
         private_instance_types: Vec<InstanceType>,
-        application_queue: Box<dyn PriorityQueue>,
-        unfeasible_policy: Box<dyn UnfeasiblePolicy>,
+        queue_sorting_policy: QueueSortingPolicy,
+        unfeasible_policy: UnfeasiblePolicy,
     ) -> Self {
         Self {
             private_instance_types,
-            application_queue,
+            application_queue: VecDeque::new(),
+            queue_sorting_policy,
             unfeasible_policy,
         }
     }
