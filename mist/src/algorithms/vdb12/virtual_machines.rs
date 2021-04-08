@@ -13,7 +13,7 @@ pub struct Vm {
 
 pub type Price = f64;
 pub type BillingInterval = f64;
-pub type Cost = f64; // price * billing_period
+pub type Cost = f64; // price * billing_interval
 
 #[derive(Debug, Clone)]
 #[derive(Deserialize, Serialize)]
