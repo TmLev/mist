@@ -20,7 +20,8 @@ impl PublicScheduler {
             .collect();
 
         if possible_providers_with_costs.len() == 0 {
-            // TODO(TmLev): public providers *should* be able to execute any application in theory.
+            // Public providers *should* be able to execute any application in theory.
+            // TODO(TmLev): but only in theory.
             panic!("Public providers can not execute application");
         }
 
