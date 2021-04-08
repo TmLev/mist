@@ -41,27 +41,11 @@ impl Application {
         self
     }
 
+    pub fn deadline(&self) -> Deadline {
+        self.deadline
+    }
+
     pub fn to_json(&self) -> String {
         serde_json::to_string_pretty(&self).unwrap()
-    }
-}
-
-impl PartialEq for Application {
-    fn eq(&self, other: &Self) -> bool {
-        self.deadline == other.deadline
-    }
-}
-
-impl Eq for Application {}
-
-impl PartialOrd for Application {
-    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        self.deadline.partial_cmp(&other.deadline)
-    }
-}
-
-impl Ord for Application {
-    fn cmp(&self, other: &Self) -> Ordering {
-        self.deadline.cmp(&other.deadline)
     }
 }
