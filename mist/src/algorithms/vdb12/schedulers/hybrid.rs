@@ -1,5 +1,3 @@
-use std::collections::VecDeque;
-
 use crate::vdb12::{Application, InstanceType};
 
 enum QueueSortingPolicy {
@@ -14,7 +12,7 @@ enum UnfeasiblePolicy {
 
 struct HybridScheduler {
     private_instance_types: Vec<InstanceType>,
-    application_queue: VecDeque<Application>,
+    application_queue: Vec<Application>,
     queue_sorting_policy: QueueSortingPolicy,
     unfeasible_policy: UnfeasiblePolicy,
 }
@@ -27,19 +25,29 @@ impl HybridScheduler {
     ) -> Self {
         Self {
             private_instance_types,
-            application_queue: VecDeque::new(),
+            application_queue: Vec::new(),
             queue_sorting_policy,
             unfeasible_policy,
         }
     }
 
-    pub fn enqueue_application(&mut self, application: Application) {
-        ap
+    pub fn add_applications(&mut self, applications: Vec<Application>) {
+        self.application_queue.extend(applications);
+        self.sort_queue();
+    }
+
+    fn sort_queue(&mut self) {
+        match self.queue_sorting_policy {
+            QueueSortingPolicy::FirstComeFirstServed => {}
+            QueueSortingPolicy::EarliestDeadlineFirst => self
+                .application_queue
+                .sort_by_key(|application| application.deadline()),
+        };
     }
 
     fn scan(&mut self) -> Option<Application> {
-        for (index, application) in self.applications.iter_mut().enumerate() {
-            for task in &application.tasks {
+        for (index, application) in self.application_queue.iter_mut().enumerate() {
+            for task in &application.tasks.iter() {
                 let time = get_start_time(schedule, task);
                 let it = get_instance_type(task, time);
 
