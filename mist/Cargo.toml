@@ -10,7 +10,7 @@ path = "src/lib.rs"
 
 [dependencies]
 # Actor model
-stakker = "=0.2.0"
+stakker = "0.2"
 
 # Time & dates
 chrono = { version = "0.4", features = ["serde"] }
