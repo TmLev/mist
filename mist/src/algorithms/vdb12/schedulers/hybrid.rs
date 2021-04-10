@@ -1,16 +1,16 @@
 use crate::vdb12::{Application, InstanceType};
 
-enum SortingPolicy {
+pub enum SortingPolicy {
     FirstComeFirstServed,
     EarliestDeadlineFirst,
 }
 
-enum UnfeasiblePolicy {
+pub enum UnfeasiblePolicy {
     CheapestToPublic,
     UnfeasibleToPublic,
 }
 
-struct HybridScheduler {
+pub struct HybridScheduler {
     private_instance_types: Vec<InstanceType>,
     application_queue: Vec<Application>,
     sorting_policy: SortingPolicy,
@@ -38,8 +38,8 @@ impl HybridScheduler {
 
     fn sort_queue(&mut self) {
         match self.sorting_policy {
-            QueueSortingPolicy::FirstComeFirstServed => {}
-            QueueSortingPolicy::EarliestDeadlineFirst => self
+            SortingPolicy::FirstComeFirstServed => {}
+            SortingPolicy::EarliestDeadlineFirst => self
                 .application_queue
                 .sort_by_key(|application| application.deadline()),
         };
