@@ -1,3 +1,5 @@
+use stakker::CX;
+
 use crate::vdb12::{Application, HybridScheduler};
 
 pub struct ServiceProvider {
