@@ -1,13 +1,14 @@
 use serde::{Deserialize, Serialize};
 
+/// `Vm` reflects virtual machine that runs applications or services.
 #[derive(Debug, Clone)]
 #[derive(Ord, PartialOrd, Eq, PartialEq)]
 #[derive(Deserialize, Serialize)]
 pub struct Vm {
-    // Number of virtual CPU cores
+    /// Number of virtual CPU cores.
     pub cpu: u32,
 
-    // Megabytes of RAM
+    /// Megabytes of RAM.
     pub mem: u32,
 }
 
