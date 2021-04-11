@@ -6,7 +6,8 @@ use crate::vdb12::{Application, ServiceProvider};
 
 pub struct Customer {
     service_provider: Actor<ServiceProvider>,
-    send_interval: Duration,
+    num_total_sends: usize,
+    num_scheduled_sends: usize,
 }
 
 impl Customer {
@@ -16,21 +17,32 @@ impl Customer {
 
         Some(Self {
             service_provider,
-            send_interval,
+            num_total_sends: 2, // TODO(TmLev): randomize.
+            num_scheduled_sends: 0,
         })
     }
 
-    fn schedule_next_request(&self, cx: CX![]) {
-        // TODO(TmLev): randomize.
-        let send_interval = Duration::new(100, 0);
-        after!(send_interval, [cx], send_applications());
+    fn schedule_next_request(&mut self, cx: CX![]) {
+        if self.num_total_sends > 0 {
+            // TODO(TmLev): randomize.
+            let send_interval = Duration::new(100, 0);
+            after!(send_interval, [cx], send_applications());
+
+            self.num_total_sends -= 1;
+            self.num_scheduled_sends += 1;
+        }
+
+        if self.num_total_sends == 0 && self.num_scheduled_sends == 0 {
+            stop!(cx);
+        }
     }
 
-    pub fn send_applications(&self, cx: CX![]) {
+    pub fn send_applications(&mut self, cx: CX![]) {
         let applications = self.generate_applications();
 
         // Send applications to service provider.
         call!([self.service_provider], customer_request(applications));
+        self.num_scheduled_sends -= 1;
 
         // Repeat again after some time.
         call!([cx], schedule_next_request());
