@@ -1,8 +1,10 @@
 use std::time::Duration;
 
+use chrono::Utc;
+
 use stakker::{after, call, stop, Actor, CX};
 
-use crate::vdb12::{Application, ServiceProvider};
+use crate::vdb12::{Application, Deadline, ServiceProvider, Task, Vm};
 
 pub struct Customer {
     service_provider: Actor<ServiceProvider>,
@@ -49,6 +51,11 @@ impl Customer {
     }
 
     fn generate_applications(&self) -> Vec<Application> {
-        todo!()
+        vec![Application::new(
+            vec![Task {
+                minimal_vm_requirements: Vm { cpu: 1, mem: 1000 },
+            }],
+            Utc::now(),
+        )]
     }
 }
