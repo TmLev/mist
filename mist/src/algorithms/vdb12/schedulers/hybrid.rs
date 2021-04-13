@@ -47,7 +47,7 @@ impl HybridScheduler {
 
     fn scan(&mut self) -> Option<Application> {
         for (index, application) in self.application_queue.iter_mut().enumerate() {
-            for task in &application.tasks.iter() {
+            for task in application.tasks.iter() {
                 // let time = get_start_time(schedule, task);
                 // let it = get_instance_type(task, time);
             }
