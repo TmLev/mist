@@ -42,6 +42,8 @@ impl Customer {
     pub fn send_applications(&mut self, cx: CX![]) {
         let applications = self.generate_applications();
 
+        log::info!("Sending applications at {:?}", cx.now());
+
         // Send applications to service provider.
         call!([self.service_provider], customer_request(applications));
         self.num_scheduled_sends -= 1;
