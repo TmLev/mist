@@ -1,3 +1,4 @@
+use std::io::Write;
 use std::time::{Duration, Instant};
 
 use env_logger;
@@ -11,6 +12,8 @@ use crate::Algorithm;
 // TODO(TmLev): stubbed with `vdb12` for now.
 pub struct Mist {
     core: Stakker,
+    max_steps: Option<usize>,
+    current_step: usize,
     service_provider: ActorOwn<ServiceProvider>,
     customers: Vec<ActorOwn<Customer>>,
 }
@@ -18,7 +21,18 @@ pub struct Mist {
 impl Mist {
     pub fn new(algorithm: Algorithm) -> Self {
         // Logging.
-        env_logger::init();
+        // TODO(TmLev): format simulation time & current step.
+        env_logger::builder()
+            .format(|buf, record| {
+                writeln!(
+                    buf,
+                    "[{}] [{}] {}",
+                    record.level(),
+                    record.target(),
+                    record.args()
+                )
+            })
+            .init();
 
         // Simulation core.
         let mut core = Stakker::new(Instant::now());
@@ -42,9 +56,17 @@ impl Mist {
         // Ready.
         Self {
             core,
+            max_steps: None,
+            current_step: 0,
             service_provider,
             customers,
         }
+    }
+
+    // Builder pattern.
+    pub fn with_max_steps(mut self, s: usize) -> Self {
+        self.max_steps = Some(s);
+        self
     }
 
     pub fn run(&mut self) {
@@ -52,18 +74,23 @@ impl Mist {
 
         let stakker = &mut self.core;
         let mut now = Instant::now();
-
-        let mut count = 0;
-
         stakker.run(now, false);
+
         while stakker.not_shutdown() {
             now += stakker.next_wait_max(now, Duration::from_secs(10), false);
             stakker.run(now, false);
 
-            count += 1;
-            if count > 50 {
+            self.current_step += 1;
+            let reached_max_steps = match self.max_steps {
+                None => false,
+                Some(max) => self.current_step > max,
+            };
+            if reached_max_steps {
+                log::info!("Reached maximum number of steps");
                 break;
             }
         }
+
+        log::info!("Stopping simulation");
     }
 }
