@@ -6,16 +6,17 @@ use log;
 
 use stakker::{actor, ret_nop, Actor, ActorOwn, Stakker};
 
-use crate::vdb12::{Customer, HybridScheduler, ServiceProvider, SortingPolicy, UnfeasiblePolicy};
+use crate::algorithms::AlgorithmContext;
+use crate::vdb12::{
+    Context, Customer, HybridScheduler, ServiceProvider, SortingPolicy, UnfeasiblePolicy,
+};
 use crate::Algorithm;
 
-// TODO(TmLev): stubbed with `vdb12` for now.
 pub struct Mist {
     core: Stakker,
     max_steps: Option<usize>,
     current_step: usize,
-    service_provider: ActorOwn<ServiceProvider>,
-    customers: Vec<ActorOwn<Customer>>,
+    algorithm_context: AlgorithmContext,
 }
 
 impl Mist {
@@ -38,28 +39,17 @@ impl Mist {
         let mut core = Stakker::new(Instant::now());
         let stakker = &mut core;
 
-        // Service provider.
-        let hybrid_scheduler = HybridScheduler::new(
-            vec![],
-            SortingPolicy::FirstComeFirstServed,
-            UnfeasiblePolicy::UnfeasibleToPublic,
-        );
-        let service_provider = actor!(stakker, ServiceProvider::init(hybrid_scheduler), ret_nop!());
-
-        // Customers.
-        let customers = vec![actor!(
-            stakker,
-            Customer::init(service_provider.clone()),
-            ret_nop!()
-        )];
+        // Algorithm context.
+        let algorithm_context = match algorithm {
+            Algorithm::Vdb12 => AlgorithmContext::Vdb12(Context::new(stakker)),
+        };
 
         // Ready.
         Self {
             core,
             max_steps: None,
             current_step: 0,
-            service_provider,
-            customers,
+            algorithm_context,
         }
     }
 
