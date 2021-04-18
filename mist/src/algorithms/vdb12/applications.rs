@@ -47,3 +47,11 @@ impl Application {
         serde_json::to_string_pretty(&self).unwrap()
     }
 }
+
+impl PartialEq for Application {
+    fn eq(&self, other: &Application) -> bool {
+        self.uuid == other.uuid
+    }
+}
+
+impl Eq for Application {}
