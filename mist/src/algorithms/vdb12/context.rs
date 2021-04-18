@@ -1,6 +1,9 @@
 use stakker::{actor, ret_nop, ActorOwn, Stakker};
 
-use crate::vdb12::{Customer, HybridScheduler, ServiceProvider, SortingPolicy, UnfeasiblePolicy};
+use crate::vdb12::{
+    Customer, HybridScheduler, InstanceType, PublicProvider, PublicScheduler, ServiceProvider,
+    SortingPolicy, UnfeasiblePolicy, Vm,
+};
 
 pub struct Context {
     service_provider: ActorOwn<ServiceProvider>,
@@ -10,10 +13,17 @@ pub struct Context {
 impl Context {
     pub fn new(stakker: &mut Stakker) -> Self {
         // Service provider.
+        let public_providers = vec![PublicProvider::new(vec![InstanceType {
+            vm: Vm { cpu: 16, mem: 16 },
+            price: 2.0,
+            billing_interval: 3600.0,
+        }])];
+        let public_scheduler = PublicScheduler::new(public_providers);
         let hybrid_scheduler = HybridScheduler::new(
             vec![],
             SortingPolicy::FirstComeFirstServed,
             UnfeasiblePolicy::UnfeasibleToPublic,
+            public_scheduler,
         );
         let service_provider = actor!(stakker, ServiceProvider::init(hybrid_scheduler), ret_nop!());
 
