@@ -9,26 +9,17 @@ impl PublicScheduler {
         Self { public_providers }
     }
 
-    pub fn cheapest_public_provider(&self, application: &Application) -> Option<&PublicProvider> {
-        let possible_providers_with_costs: Vec<_> = self
-            .public_providers
-            .iter()
+    pub fn cheapest_public_provider(
+        &mut self,
+        application: &Application,
+    ) -> Option<&mut PublicProvider> {
+        self.public_providers
+            .iter_mut()
             .filter_map(|provider| match provider.cost(application) {
                 ScheduleCost::Impossible => None,
                 ScheduleCost::Possible(cost) => Some((provider, cost)),
             })
-            .collect();
-
-        if possible_providers_with_costs.len() > 0 {
-            Some(
-                possible_providers_with_costs
-                    .iter()
-                    .min_by(|(_, left), (_, right)| left.partial_cmp(right).unwrap())
-                    .unwrap()
-                    .0,
-            )
-        } else {
-            None
-        }
+            .min_by(|(_, left), (_, right)| left.partial_cmp(right).unwrap())
+            .map(|(provider, _)| provider)
     }
 }
