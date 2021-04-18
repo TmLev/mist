@@ -78,14 +78,14 @@ impl HybridScheduler {
 
         match self.unfeasible_policy {
             UnfeasiblePolicy::UnfeasibleToPublic => {
-                let mut public_provider = self
+                let cheapest_public_provider = self
                     .public_scheduler
                     .cheapest_public_provider(&unfeasible_application);
-                match public_provider {
+                match cheapest_public_provider {
                     None => {
                         // TODO(TmLev): application deadline can not be met.
                     }
-                    Some(mut public_provider) => public_provider.schedule(unfeasible_application),
+                    Some(public_provider) => public_provider.schedule(unfeasible_application),
                 }
             }
             UnfeasiblePolicy::CheapestToPublic => {}
