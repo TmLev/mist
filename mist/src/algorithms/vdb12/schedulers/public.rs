@@ -9,7 +9,7 @@ impl PublicScheduler {
         Self { public_providers }
     }
 
-    pub fn cheapest_public_provider(&self, application: &Application) -> &PublicProvider {
+    pub fn cheapest_public_provider(&self, application: &Application) -> Option<&PublicProvider> {
         let possible_providers_with_costs: Vec<_> = self
             .public_providers
             .iter()
@@ -19,16 +19,16 @@ impl PublicScheduler {
             })
             .collect();
 
-        if possible_providers_with_costs.len() == 0 {
-            // Public providers *should* be able to execute any application in theory.
-            // TODO(TmLev): but only in theory.
-            panic!("Public providers can not execute application");
+        if possible_providers_with_costs.len() > 0 {
+            Some(
+                possible_providers_with_costs
+                    .iter()
+                    .min_by(|(_, left), (_, right)| left.partial_cmp(right).unwrap())
+                    .unwrap()
+                    .0,
+            )
+        } else {
+            None
         }
-
-        possible_providers_with_costs
-            .iter()
-            .min_by(|left, right| left.1.partial_cmp(&right.1).unwrap())
-            .unwrap()
-            .0
     }
 }
