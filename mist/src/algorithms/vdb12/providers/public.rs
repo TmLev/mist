@@ -15,7 +15,7 @@ impl PublicProvider {
     }
 
     pub fn cost(&self, application: &Application) -> ScheduleCost {
-        let mut total = Cost::zero();
+        let mut total = 0.0;
 
         for task in application.tasks.iter() {
             // FIXME(TmLev):
