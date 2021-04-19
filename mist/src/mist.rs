@@ -6,22 +6,25 @@ use log;
 
 use stakker::{actor, ret_nop, Actor, ActorOwn, Stakker};
 
-use crate::algorithms::AlgorithmContext;
 use crate::vdb12::{
     Context, Customer, HybridScheduler, ServiceProvider, SortingPolicy, UnfeasiblePolicy,
 };
-use crate::Algorithm;
+use crate::AlgorithmContext;
 
+/// The heart of the simulator.
 pub struct Mist {
+    /// Main event loop.
     core: Stakker,
-    max_steps: Option<usize>,
+    /// Current step of the simulation.
     current_step: usize,
-    algorithm_context: AlgorithmContext,
+    /// Optional limit on the simulation steps.
+    max_steps: Option<usize>,
+    /// Everything algorithm needs.
+    algorithm_context: Option<AlgorithmContext>,
 }
 
 impl Mist {
-    pub fn new(algorithm: Algorithm) -> Self {
-        // Logging.
+    pub fn new() -> Self {
         // TODO(TmLev): format simulation time & current step.
         env_logger::builder()
             .format(|buf, record| {
@@ -35,27 +38,25 @@ impl Mist {
             })
             .init();
 
-        // Simulation core.
-        let mut core = Stakker::new(Instant::now());
-        let stakker = &mut core;
-
-        // Algorithm context.
-        let algorithm_context = match algorithm {
-            Algorithm::Vdb12 => AlgorithmContext::Vdb12(Context::new(stakker)),
-        };
-
-        // Ready.
         Self {
-            core,
-            max_steps: None,
+            core: Stakker::new(Instant::now()),
             current_step: 0,
-            algorithm_context,
+            max_steps: None,
+            algorithm_context: None,
         }
     }
 
-    // Builder pattern.
-    pub fn with_max_steps(mut self, s: usize) -> Self {
+    pub fn core(&mut self) -> &mut Stakker {
+        &mut self.core
+    }
+
+    pub fn with_max_steps(&mut self, s: usize) -> &mut Self {
         self.max_steps = Some(s);
+        self
+    }
+
+    pub fn with_algorithm_context(&mut self, ctx: AlgorithmContext) -> &mut Self {
+        self.algorithm_context = Some(ctx);
         self
     }
 
