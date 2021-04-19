@@ -20,32 +20,40 @@ pub enum UnfeasiblePolicy {
 
 /// Hybrid cloud scheduler. Distributes arriving applications between the private and public clouds.
 pub struct HybridScheduler {
-    /// Available instance types in the private cloud.
-    private_instance_types: Vec<InstanceType>,
+    /// Current simulation time.
+    now: Instant,
     /// Queue for incoming applications.
     application_queue: Vec<Application>,
     /// Queue sorting policy.
     sorting_policy: SortingPolicy,
     /// Unfeasible applications policy.
     unfeasible_policy: UnfeasiblePolicy,
+    /// Available instance types in the private cloud.
+    private_instance_types: Vec<InstanceType>,
     /// The public cloud scheduler.
     public_scheduler: PublicScheduler,
 }
 
 impl HybridScheduler {
     pub fn new(
+        now: Instant,
         private_instance_types: Vec<InstanceType>,
         sorting_policy: SortingPolicy,
         unfeasible_policy: UnfeasiblePolicy,
         public_scheduler: PublicScheduler,
     ) -> Self {
         Self {
+            now,
             private_instance_types,
             application_queue: Vec::new(),
             sorting_policy,
             unfeasible_policy,
             public_scheduler,
         }
+    }
+
+    pub fn advance_time(&mut self, now: Instant) {
+        self.now = now;
     }
 
     pub fn add_applications(&mut self, applications: Vec<Application>) {
@@ -70,13 +78,13 @@ impl HybridScheduler {
         };
     }
 
-    pub fn scan(&mut self, now: Instant) {
+    pub fn scan(&mut self) {
         for (index, application) in self.application_queue.iter_mut().enumerate() {
             let status = { for task in application.tasks.iter() {} };
         }
     }
 
-    pub fn schedule(&mut self, now: Instant) {}
+    pub fn schedule(&mut self) {}
 
     fn apply_unfeasible_policy(&mut self, unfeasible_application: &Application) {
         let unfeasible_application = self.remove_application_from_queue(unfeasible_application);
