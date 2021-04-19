@@ -11,7 +11,7 @@ fn main() {
     // Set maximum number of steps.
     mist.with_max_steps(50);
 
-    // Choose algorithm and access Mist core for creating algorithm context.
+    // Choose algorithm and access Mist core for creating context.
     let ctx = AlgorithmContext::Vdb12(Context::new(mist.core()));
 
     // Provide algorithm context.
