@@ -1,11 +1,21 @@
-use mist::{Algorithm, Mist};
+use mist::vdb12::Context;
+use mist::{AlgorithmContext, Mist};
 
 fn main() {
-    // Enable debug logging
+    // Enable debug logging.
     std::env::set_var("RUST_LOG", "debug");
 
-    // Create simulator instance
-    let mut mist = Mist::new(Algorithm::Vdb12).with_max_steps(50);
+    // Create simulator instance.
+    let mut mist = Mist::new();
+
+    // Set maximum number of steps.
+    mist.with_max_steps(50);
+
+    // Choose algorithm and access Mist core for creating algorithm context.
+    let ctx = AlgorithmContext::Vdb12(Context::new(mist.core()));
+
+    // Provide algorithm context.
+    mist.with_algorithm_context(ctx);
 
     // Run simulation
     mist.run();
