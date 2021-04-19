@@ -20,6 +20,7 @@ impl Context {
         }])];
         let public_scheduler = PublicScheduler::new(public_providers);
         let hybrid_scheduler = HybridScheduler::new(
+            core.now(),
             vec![],
             SortingPolicy::FirstComeFirstServed,
             UnfeasiblePolicy::UnfeasibleToPublic,

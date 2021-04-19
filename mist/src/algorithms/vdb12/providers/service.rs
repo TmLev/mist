@@ -16,7 +16,7 @@ impl ServiceProvider {
     pub fn init(cx: CX![], scheduler: HybridScheduler) -> Option<Self> {
         log::info!("Initialising");
 
-        // TODO(TmLev): add customization.
+        // TODO(TmLev): customize.
         let scan_interval = Duration::from_secs(5);
         let schedule_interval = Duration::from_secs(1);
 
@@ -30,20 +30,23 @@ impl ServiceProvider {
         })
     }
 
-    pub fn customer_request(&mut self, _cx: CX![], applications: Vec<Application>) {
+    pub fn customer_request(&mut self, cx: CX![], applications: Vec<Application>) {
         log::info!("Customer request arrived");
+        self.scheduler.advance_time(cx.now());
         self.scheduler.add_applications(applications);
     }
 
     fn scan(&mut self, cx: CX![]) {
         log::info!("Scanning application queue");
-        self.scheduler.scan(cx.now());
+        self.scheduler.advance_time(cx.now());
+        self.scheduler.scan();
         after!(self.scan_interval, [cx], scan());
     }
 
     fn schedule(&mut self, cx: CX![]) {
         log::info!("Scheduling applications");
-        self.scheduler.schedule(cx.now());
+        self.scheduler.advance_time(cx.now());
+        self.scheduler.schedule();
         after!(self.schedule_interval, [cx], schedule());
     }
 }
