@@ -68,7 +68,11 @@ impl Mist {
         stakker.run(now, false);
 
         while stakker.not_shutdown() {
-            now += stakker.next_wait_max(now, Duration::from_secs(10), false);
+            now += stakker.next_wait_max(
+                now,
+                Duration::from_secs(10), // TODO(TmLev): customize.
+                false,
+            );
             stakker.run(now, false);
 
             self.current_step += 1;
