@@ -4,8 +4,7 @@ pub use mist::Mist;
 
 // Algorithms
 mod algorithms;
-pub use algorithms::vdb12;
-pub use algorithms::Algorithm;
+pub use algorithms::{vdb12, AlgorithmContext};
 
 // Time & dates
 pub use chrono;
