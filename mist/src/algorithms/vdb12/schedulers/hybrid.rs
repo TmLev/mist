@@ -20,10 +20,15 @@ pub enum UnfeasiblePolicy {
 
 /// Hybrid cloud scheduler. Distributes arriving applications between the private and public clouds.
 pub struct HybridScheduler {
+    /// Available instance types in the private cloud.
     private_instance_types: Vec<InstanceType>,
+    /// Queue for incoming applications.
     application_queue: Vec<Application>,
+    /// Queue sorting policy.
     sorting_policy: SortingPolicy,
+    /// Unfeasible applications policy.
     unfeasible_policy: UnfeasiblePolicy,
+    /// The public cloud scheduler.
     public_scheduler: PublicScheduler,
 }
 
