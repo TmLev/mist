@@ -20,7 +20,7 @@ impl PublicProvider {
         for task in application.tasks.iter() {
             // FIXME(TmLev):
             //   1. Check if `task` can meet deadline on `instance_type`.
-            //   2. `price` should be multiplied by time execution time.
+            //   2. `price` should be multiplied by execution time.
             //      Requires access to simulation time.
             let cheapest_instance_type = self
                 .instance_types
