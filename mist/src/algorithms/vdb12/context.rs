@@ -11,7 +11,7 @@ pub struct Context {
 }
 
 impl Context {
-    pub fn new(stakker: &mut Stakker) -> Self {
+    pub fn new(core: &mut Stakker) -> Self {
         // Service provider.
         let public_providers = vec![PublicProvider::new(vec![InstanceType {
             vm: Vm { cpu: 16, mem: 16 },
@@ -25,11 +25,11 @@ impl Context {
             UnfeasiblePolicy::UnfeasibleToPublic,
             public_scheduler,
         );
-        let service_provider = actor!(stakker, ServiceProvider::init(hybrid_scheduler), ret_nop!());
+        let service_provider = actor!(core, ServiceProvider::init(hybrid_scheduler), ret_nop!());
 
         // Customers.
         let customers = vec![actor!(
-            stakker,
+            core,
             Customer::init(service_provider.clone()),
             ret_nop!()
         )];
