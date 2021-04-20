@@ -1,6 +1,6 @@
 use std::time::Instant;
 
-use crate::vdb12::{Application, InstanceType, PublicScheduler};
+use crate::vdb12::{Application, Galactus, InstanceType, PublicScheduler};
 
 /// Sorting policy determines in what order applications waiting in queue should be scheduled.
 pub enum SortingPolicy {
@@ -32,6 +32,8 @@ pub struct HybridScheduler {
     private_instance_types: Vec<InstanceType>,
     /// The public cloud scheduler.
     public_scheduler: PublicScheduler,
+    /// Metrics watcher.
+    galactus: Galactus,
 }
 
 impl HybridScheduler {
@@ -49,6 +51,7 @@ impl HybridScheduler {
             sorting_policy,
             unfeasible_policy,
             public_scheduler,
+            galactus: Galactus::new(),
         }
     }
 
@@ -93,10 +96,11 @@ impl HybridScheduler {
             UnfeasiblePolicy::UnfeasibleToPublic => {
                 let cheapest_public_provider = self
                     .public_scheduler
-                    .cheapest_public_provider(&unfeasible_application);
+                    .cheapest_public_provider(&unfeasible_application, self.now);
                 match cheapest_public_provider {
                     None => {
                         // TODO(TmLev): application deadline can not be met.
+                        self.galactus.missed_deadline(unfeasible_application);
                     }
                     Some(public_provider) => public_provider.schedule(unfeasible_application),
                 }
