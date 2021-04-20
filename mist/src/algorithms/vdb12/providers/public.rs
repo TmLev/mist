@@ -1,3 +1,7 @@
+use std::error::Error;
+use std::path::Path;
+use std::time::Instant;
+
 use crate::vdb12::{Application, Cost, InstanceType};
 
 pub enum ScheduleCost {
@@ -5,6 +9,7 @@ pub enum ScheduleCost {
     Possible(Cost),
 }
 
+#[derive(Debug, Clone)]
 pub struct PublicProvider {
     instance_types: Vec<InstanceType>,
 }
@@ -14,7 +19,13 @@ impl PublicProvider {
         Self { instance_types }
     }
 
-    pub fn cost(&self, application: &Application) -> ScheduleCost {
+    pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Self, Box<dyn Error>> {
+        let raw = std::fs::read_to_string(path)?;
+        let instance_types = serde_json::from_str(&raw)?;
+        Ok(Self { instance_types })
+    }
+
+    pub fn cost(&self, application: &Application, now: Instant) -> ScheduleCost {
         let mut total = 0.0;
 
         for task in application.tasks.iter() {
