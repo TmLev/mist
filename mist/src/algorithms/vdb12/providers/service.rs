@@ -31,20 +31,30 @@ impl ServiceProvider {
     }
 
     pub fn customer_request(&mut self, cx: CX![], applications: Vec<Application>) {
-        log::info!("Customer request arrived");
+        log::info!(
+            "Customer request arrived, application uuids: [{}]",
+            applications
+                .clone()
+                .iter()
+                .map(|application| application.uuid().to_string())
+                .collect::<Vec<_>>()
+                .join(", ")
+        );
+
+        for application in applications.iter() {}
         self.scheduler.advance_time(cx.now());
         self.scheduler.add_applications(applications);
     }
 
     fn scan(&mut self, cx: CX![]) {
-        log::info!("Scanning application queue");
+        log::debug!("Scanning application queue");
         self.scheduler.advance_time(cx.now());
         self.scheduler.scan();
         after!(self.scan_interval, [cx], scan());
     }
 
     fn schedule(&mut self, cx: CX![]) {
-        log::info!("Scheduling applications");
+        log::debug!("Scheduling applications");
         self.scheduler.advance_time(cx.now());
         self.scheduler.schedule();
         after!(self.schedule_interval, [cx], schedule());
