@@ -1,5 +1,6 @@
 use stakker::{actor, ret_nop, ActorOwn, Stakker};
 
+use crate::utils::navigation;
 use crate::vdb12::{
     Customer, HybridScheduler, InstanceType, PublicProvider, PublicScheduler, ServiceProvider,
     SortingPolicy, UnfeasiblePolicy, Vm,
@@ -12,13 +13,17 @@ pub struct Context {
 
 impl Context {
     pub fn new(core: &mut Stakker) -> Self {
-        // Service provider.
-        let public_providers = vec![PublicProvider::new(vec![InstanceType {
-            vm: Vm { cpu: 16, mem: 16 },
-            price: 2.0,
-            billing_interval: 3600.0,
-        }])];
+        // Navigate directory with instance types.
+        let instance_types_dir = navigation::data_dir().join("vdb12/instance-types");
+
+        // Public providers & scheduler.
+        let public_providers = vec![
+            PublicProvider::from_file(instance_types_dir.clone().join("go-grid.json")).unwrap(),
+            PublicProvider::from_file(instance_types_dir.clone().join("amazon-ec2.json")).unwrap(),
+        ];
         let public_scheduler = PublicScheduler::new(public_providers);
+
+        // Hybrid scheduler & service provider.
         let hybrid_scheduler = HybridScheduler::new(
             core.now(),
             vec![],
