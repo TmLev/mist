@@ -15,12 +15,11 @@ pub type Deadline = DateTime<Utc>;
 #[derive(Debug, Clone)]
 #[derive(Deserialize, Serialize)]
 pub struct Application {
-    // Bag of tasks.
+    /// Bag of tasks.
     pub tasks: Vec<Task>,
-    // Way to differentiate applications.
+    /// Way to differentiate applications.
     uuid: Uuid,
-    // Deadline to meet.
-    // Private because it may be used as key in sorted data structures.
+    /// Deadline to meet. May be used as a key in the sorted data structures.
     deadline: Deadline,
 }
 
@@ -37,6 +36,10 @@ impl Application {
     pub fn with_uuid(mut self, uuid: Uuid) -> Self {
         self.uuid = uuid;
         self
+    }
+
+    pub fn uuid(&self) -> Uuid {
+        self.uuid
     }
 
     pub fn deadline(&self) -> Deadline {
