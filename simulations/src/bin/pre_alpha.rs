@@ -3,13 +3,13 @@ use mist::{AlgorithmContext, Mist};
 
 fn main() {
     // Enable debug logging.
-    std::env::set_var("RUST_LOG", "debug");
+    std::env::set_var("RUST_LOG", "info");
 
     // Create simulator instance.
     let mut mist = Mist::new();
 
     // Set maximum number of steps.
-    mist.with_max_steps(50);
+    mist.with_max_steps(500);
 
     // Choose algorithm and access Mist core for creating context.
     let ctx = AlgorithmContext::Vdb12(Context::new(mist.core()));
