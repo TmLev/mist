@@ -40,8 +40,6 @@ impl ServiceProvider {
                 .collect::<Vec<_>>()
                 .join(", ")
         );
-
-        for application in applications.iter() {}
         self.scheduler.advance_time(cx.now());
         self.scheduler.add_applications(applications);
     }
