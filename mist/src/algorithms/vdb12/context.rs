@@ -2,8 +2,8 @@ use stakker::{actor, ret_nop, ActorOwn, Stakker};
 
 use crate::utils::navigation;
 use crate::vdb12::{
-    Customer, HybridScheduler, InstanceType, PublicProvider, PublicScheduler, ServiceProvider,
-    SortingPolicy, UnfeasiblePolicy, Vm,
+    Customer, HybridScheduler, PublicProvider, PublicScheduler, ServiceProvider, SortingPolicy,
+    UnfeasiblePolicy,
 };
 
 pub struct Context {
@@ -26,9 +26,9 @@ impl Context {
         // Hybrid scheduler & service provider.
         let hybrid_scheduler = HybridScheduler::new(
             core.now(),
-            vec![],
             SortingPolicy::FirstComeFirstServed,
             UnfeasiblePolicy::UnfeasibleToPublic,
+            vec![],
             public_scheduler,
         );
         let service_provider = actor!(core, ServiceProvider::init(hybrid_scheduler), ret_nop!());
