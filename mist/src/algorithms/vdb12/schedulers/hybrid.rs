@@ -1,5 +1,7 @@
 use std::time::Instant;
 
+use uuid::Uuid;
+
 use crate::vdb12::{Application, Galactus, InstanceType, PublicScheduler};
 
 /// Sorting policy determines in what order applications waiting in queue should be scheduled.
@@ -22,16 +24,23 @@ pub enum UnfeasiblePolicy {
 pub struct HybridScheduler {
     /// Current simulation time.
     now: Instant,
+
     /// Queue for incoming applications.
     application_queue: Vec<Application>,
     /// Queue sorting policy.
     sorting_policy: SortingPolicy,
     /// Unfeasible applications policy.
     unfeasible_policy: UnfeasiblePolicy,
+
+    /// Restrictions of the private cloud.
+    max_cpu: u32,
+    max_mem: u32,
     /// Available instance types in the private cloud.
     private_instance_types: Vec<InstanceType>,
+
     /// The public cloud scheduler.
     public_scheduler: PublicScheduler,
+
     /// Metrics watcher.
     galactus: Galactus,
 }
@@ -39,17 +48,26 @@ pub struct HybridScheduler {
 impl HybridScheduler {
     pub fn new(
         now: Instant,
-        private_instance_types: Vec<InstanceType>,
+
         sorting_policy: SortingPolicy,
         unfeasible_policy: UnfeasiblePolicy,
+
+        private_instance_types: Vec<InstanceType>,
+
         public_scheduler: PublicScheduler,
     ) -> Self {
         Self {
             now,
-            private_instance_types,
+
             application_queue: Vec::new(),
             sorting_policy,
             unfeasible_policy,
+
+            // TODO(TmLev): extract & customize.
+            max_cpu: 60,
+            max_mem: 64000,
+            private_instance_types,
+
             public_scheduler,
             galactus: Galactus::new(),
         }
@@ -64,12 +82,13 @@ impl HybridScheduler {
         self.sort_queue();
     }
 
-    fn remove_application_from_queue(&mut self, to_remove: &Application) -> Application {
-        let application = to_remove.clone();
-        // `Vec::retain` preserves order of elements, no need to sort.
-        self.application_queue
-            .retain(|application| application != to_remove);
-        application
+    fn remove_application_from_queue(&mut self, uuid: Uuid) -> Application {
+        let index = self
+            .application_queue
+            .iter()
+            .position(|application| application.uuid() == uuid)
+            .unwrap();
+        self.application_queue.remove(index)
     }
 
     fn sort_queue(&mut self) {
@@ -82,27 +101,28 @@ impl HybridScheduler {
     }
 
     pub fn scan(&mut self) {
-        for (index, application) in self.application_queue.iter_mut().enumerate() {
-            let status = { for task in application.tasks.iter() {} };
+        // TODO(TmLev): this is an example of detecting unfeasible application.
+        if self.application_queue.len() > 0 {
+            let uuid = self.application_queue[0].uuid();
+            let unfeasible = self.remove_application_from_queue(uuid);
+            self.apply_unfeasible_policy(unfeasible);
         }
     }
 
     pub fn schedule(&mut self) {}
 
-    fn apply_unfeasible_policy(&mut self, unfeasible_application: &Application) {
-        let unfeasible_application = self.remove_application_from_queue(unfeasible_application);
-
+    pub fn apply_unfeasible_policy(&mut self, unfeasible: Application) {
         match self.unfeasible_policy {
             UnfeasiblePolicy::UnfeasibleToPublic => {
                 let cheapest_public_provider = self
                     .public_scheduler
-                    .cheapest_public_provider(&unfeasible_application, self.now);
+                    .cheapest_public_provider(&unfeasible, self.now);
                 match cheapest_public_provider {
                     None => {
                         // TODO(TmLev): application deadline can not be met.
-                        self.galactus.missed_deadline(unfeasible_application);
+                        self.galactus.missed_deadline(unfeasible);
                     }
-                    Some(public_provider) => public_provider.schedule(unfeasible_application),
+                    Some(public_provider) => public_provider.schedule(unfeasible),
                 }
             }
             UnfeasiblePolicy::CheapestToPublic => {}
