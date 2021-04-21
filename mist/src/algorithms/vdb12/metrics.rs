@@ -1,17 +1,17 @@
 use crate::vdb12::Application;
 
 pub struct Metrics {
-    num_missed_deadlines: usize,
+    pub num_missed_deadlines: usize,
 }
 
 pub struct Galactus {
-    applications_with_missed_deadlines: Vec<Application>,
+    missed_deadline_applications: Vec<Application>,
 }
 
 impl Galactus {
     pub fn new() -> Self {
         Self {
-            applications_with_missed_deadlines: Vec::new(),
+            missed_deadline_applications: Vec::new(),
         }
     }
 
@@ -20,12 +20,12 @@ impl Galactus {
             "Application {} deadline can not be met",
             application.uuid().to_string()
         );
-        self.applications_with_missed_deadlines.push(application);
+        self.missed_deadline_applications.push(application);
     }
 
     pub fn metrics(&mut self) -> Metrics {
         Metrics {
-            num_missed_deadlines: self.applications_with_missed_deadlines.len(),
+            num_missed_deadlines: self.missed_deadline_applications.len(),
         }
     }
 }
