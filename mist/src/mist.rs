@@ -4,11 +4,8 @@ use std::time::{Duration, Instant};
 use env_logger;
 use log;
 
-use stakker::{actor, ret_nop, Actor, ActorOwn, Stakker};
+use stakker::Stakker;
 
-use crate::vdb12::{
-    Context, Customer, HybridScheduler, ServiceProvider, SortingPolicy, UnfeasiblePolicy,
-};
 use crate::AlgorithmContext;
 
 /// The heart of the simulator.
