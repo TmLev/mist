@@ -1,5 +1,7 @@
 use std::time::Instant;
 
+use uuid::Uuid;
+
 use crate::vdb12::{Application, PublicProvider, ScheduleCost};
 
 pub struct PublicScheduler {
@@ -15,7 +17,7 @@ impl PublicScheduler {
         &mut self,
         application: &Application,
         now: Instant,
-    ) -> Option<&mut PublicProvider> {
+    ) -> Option<Uuid> {
         self.public_providers
             .iter_mut()
             .filter_map(|provider| match provider.cost(application, now) {
@@ -23,6 +25,10 @@ impl PublicScheduler {
                 ScheduleCost::Possible(cost) => Some((provider, cost)),
             })
             .min_by(|(_, left), (_, right)| left.partial_cmp(right).unwrap())
-            .map(|(provider, _)| provider)
+            .map(|(provider, _)| provider.uuid())
     }
+
+    pub fn schedule(&mut self, application: Application) {}
+
+    pub fn schedule_on(&mut self, application: Application, public_provider_uuid: Uuid) {}
 }
