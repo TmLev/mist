@@ -2,7 +2,7 @@ use std::time::Instant;
 
 use uuid::Uuid;
 
-use crate::vdb12::{Application, Galactus, InstanceType, PublicScheduler};
+use crate::vdb12::{Application, Galactus, PrivateScheduler, PublicScheduler};
 
 /// Sorting policy determines in what order applications waiting in queue should be scheduled.
 pub enum SortingPolicy {
@@ -32,12 +32,8 @@ pub struct HybridScheduler {
     /// Unfeasible applications policy.
     unfeasible_policy: UnfeasiblePolicy,
 
-    /// Restrictions of the private cloud.
-    max_cpu: u32,
-    max_mem: u32,
-    /// Available instance types in the private cloud.
-    private_instance_types: Vec<InstanceType>,
-
+    /// The private cloud scheduler.
+    private_scheduler: PrivateScheduler,
     /// The public cloud scheduler.
     public_scheduler: PublicScheduler,
 
@@ -52,8 +48,7 @@ impl HybridScheduler {
         sorting_policy: SortingPolicy,
         unfeasible_policy: UnfeasiblePolicy,
 
-        private_instance_types: Vec<InstanceType>,
-
+        private_scheduler: PrivateScheduler,
         public_scheduler: PublicScheduler,
     ) -> Self {
         Self {
@@ -63,32 +58,19 @@ impl HybridScheduler {
             sorting_policy,
             unfeasible_policy,
 
-            // TODO(TmLev): extract & customize.
-            max_cpu: 60,
-            max_mem: 64000,
-            private_instance_types,
-
+            private_scheduler,
             public_scheduler,
+
             galactus: Galactus::new(),
         }
     }
 
-    pub fn advance_time(&mut self, now: Instant) {
-        self.now = now;
-    }
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Queue
 
     pub fn add_applications(&mut self, applications: Vec<Application>) {
         self.application_queue.extend(applications);
         self.sort_queue();
-    }
-
-    fn remove_application_from_queue(&mut self, uuid: Uuid) -> Application {
-        let index = self
-            .application_queue
-            .iter()
-            .position(|application| application.uuid() == uuid)
-            .unwrap();
-        self.application_queue.remove(index)
     }
 
     fn sort_queue(&mut self) {
@@ -100,32 +82,84 @@ impl HybridScheduler {
         };
     }
 
+    fn find_application_index_in_queue(&mut self, uuid: Uuid) -> Option<usize> {
+        self.application_queue
+            .iter()
+            .position(|application| application.uuid() == uuid)
+    }
+
+    fn remove_application_from_queue(&mut self, uuid: Uuid) -> Application {
+        let index = self.find_application_index_in_queue(uuid).unwrap();
+        self.application_queue.remove(index)
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Simulation
+
+    pub fn advance_time(&mut self, now: Instant) {
+        self.now = now;
+    }
+
     pub fn scan(&mut self) {
         // TODO(TmLev): this is an example of detecting unfeasible application.
         if self.application_queue.len() > 0 {
-            let uuid = self.application_queue[0].uuid();
-            let unfeasible = self.remove_application_from_queue(uuid);
-            self.apply_unfeasible_policy(unfeasible);
+            self.apply_unfeasible_policy(self.application_queue[0].uuid());
         }
     }
 
     pub fn schedule(&mut self) {}
 
-    pub fn apply_unfeasible_policy(&mut self, unfeasible: Application) {
+    fn apply_unfeasible_policy(&mut self, unfeasible_uuid: Uuid) {
+        // TODO(TmLev): application deadline can not be met.
+
         match self.unfeasible_policy {
             UnfeasiblePolicy::UnfeasibleToPublic => {
+                let unfeasible = self.remove_application_from_queue(unfeasible_uuid);
                 let cheapest_public_provider = self
                     .public_scheduler
                     .cheapest_public_provider(&unfeasible, self.now);
                 match cheapest_public_provider {
-                    None => {
-                        // TODO(TmLev): application deadline can not be met.
-                        self.galactus.missed_deadline(unfeasible);
-                    }
-                    Some(public_provider) => public_provider.schedule(unfeasible),
+                    None => self.galactus.missed_deadline(unfeasible),
+                    Some(uuid) => self.public_scheduler.schedule_on(unfeasible, uuid),
                 }
             }
-            UnfeasiblePolicy::CheapestToPublic => {}
+
+            UnfeasiblePolicy::CheapestToPublic => {
+                let unfeasible_index = self
+                    .find_application_index_in_queue(unfeasible_uuid)
+                    .unwrap();
+                let unfeasible_deadline = self.application_queue[unfeasible_index].deadline();
+
+                let next_after_unfeasible: Option<usize> = self
+                    .application_queue
+                    .iter()
+                    .position(|application| application.deadline() >= unfeasible_deadline);
+
+                match next_after_unfeasible {
+                    None => {
+                        let unfeasible = self.remove_application_from_queue(unfeasible_uuid);
+                        self.galactus.missed_deadline(unfeasible);
+                    }
+                    Some(index) => {
+                        let cheapest_application: Option<&Application> = None;
+
+                        match cheapest_application {
+                            None => {
+                                let unfeasible =
+                                    self.remove_application_from_queue(unfeasible_uuid);
+                                self.galactus.missed_deadline(unfeasible);
+                            }
+                            Some(application) => {
+                                let application =
+                                    self.remove_application_from_queue(application.uuid());
+                                self.public_scheduler.schedule(application);
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
+
+    fn find_application_to_delegate(&mut self) {}
 }
