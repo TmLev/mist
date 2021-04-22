@@ -16,6 +16,7 @@ pub use providers::{
 };
 pub use schedulers::{
     hybrid::{HybridScheduler, SortingPolicy, UnfeasiblePolicy},
+    private::PrivateScheduler,
     public::PublicScheduler,
 };
 pub use virtual_machines::{BillingInterval, Cost, InstanceType, Price, Vm};
