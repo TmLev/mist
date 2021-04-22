@@ -2,6 +2,8 @@ use std::error::Error;
 use std::path::Path;
 use std::time::Instant;
 
+use uuid::Uuid;
+
 use crate::vdb12::{Application, Cost, InstanceType};
 
 pub enum ScheduleCost {
@@ -11,18 +13,29 @@ pub enum ScheduleCost {
 
 #[derive(Debug, Clone)]
 pub struct PublicProvider {
+    uuid: Uuid,
     instance_types: Vec<InstanceType>,
 }
 
 impl PublicProvider {
     pub fn new(instance_types: Vec<InstanceType>) -> Self {
-        Self { instance_types }
+        Self {
+            uuid: Uuid::new_v4(),
+            instance_types,
+        }
     }
 
     pub fn from_file<P: AsRef<Path>>(path: P) -> Result<Self, Box<dyn Error>> {
         let raw = std::fs::read_to_string(path)?;
         let instance_types = serde_json::from_str(&raw)?;
-        Ok(Self { instance_types })
+        Ok(Self {
+            uuid: Uuid::new_v4(),
+            instance_types,
+        })
+    }
+
+    pub fn uuid(&self) -> Uuid {
+        self.uuid
     }
 
     pub fn cost(&self, application: &Application, now: Instant) -> ScheduleCost {
@@ -47,6 +60,4 @@ impl PublicProvider {
 
         ScheduleCost::Possible(total)
     }
-
-    pub fn schedule(&mut self, application: Application) {}
 }
