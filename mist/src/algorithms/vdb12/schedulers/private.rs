@@ -31,5 +31,5 @@ impl PrivateScheduler {
         })
     }
 
-    pub fn schedule(&mut self, application: Application) {}
+    pub fn try_schedule(&mut self, application: Application) {}
 }

@@ -107,7 +107,20 @@ impl HybridScheduler {
         }
     }
 
-    pub fn schedule(&mut self) {}
+    pub fn schedule(&mut self) {
+        if self.application_queue.is_empty() {
+            log::debug!("Has nothing to schedule");
+            return;
+        }
+
+        let candidate = self.application_queue[0].clone();
+        let uuid = candidate.uuid();
+        log::debug!("Trying to schedule {} on private", uuid);
+
+        if self.private_scheduler.schedule(candidate) {
+            self.remove_application_from_queue(uuid);
+        }
+    }
 
     fn apply_unfeasible_policy(&mut self, unfeasible_uuid: Uuid) {
         // TODO(TmLev): application deadline can not be met.
