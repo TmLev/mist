@@ -3,10 +3,14 @@ use std::path::Path;
 
 use crate::vdb12::{Application, InstanceType};
 
+/// Utilisation of the private cloud resources as percentage [0, 100]%.
+pub type Utilisation = f64;
+
+/// Private cloud scheduler. Manages available resources of on-premises infrastructure.
 pub struct PrivateScheduler {
     /// Restrictions of the private cloud.
-    max_cpu: u32,
-    max_mem: u32,
+    available_cpu: u32,
+    available_mem: u32,
     /// Available instance types in the private cloud.
     instance_types: Vec<InstanceType>,
 }
@@ -15,8 +19,8 @@ impl PrivateScheduler {
     pub fn new(instance_types: Vec<InstanceType>) -> Self {
         Self {
             // TODO(TmLev): customize.
-            max_cpu: 60,
-            max_mem: 64000,
+            available_cpu: 60,
+            available_mem: 64000,
             instance_types,
         }
     }
@@ -25,11 +29,35 @@ impl PrivateScheduler {
         let raw = std::fs::read_to_string(path)?;
         let instance_types = serde_json::from_str(&raw)?;
         Ok(Self {
-            max_cpu: 60,
-            max_mem: 64000,
+            available_cpu: 60,
+            available_mem: 64000,
             instance_types,
         })
     }
 
-    pub fn try_schedule(&mut self, application: Application) {}
+    pub fn try_schedule(&mut self, application: Application) -> bool {
+        let instance_types = self.instance_types_for_application(&application);
+
+        let cpu = instance_types
+            .iter()
+            .map(|instance_type| instance_type.vm.cpu)
+            .sum();
+        let mem = instance_types
+            .iter()
+            .map(|instance_type| instance_type.vm.mem)
+            .sum();
+
+        if cpu > self.available_cpu || mem > self.available_mem {
+            return false;
+        }
+
+        self.available_cpu -= cpu;
+        self.available_mem -= mem;
+
+        return true;
+    }
+
+    fn instance_types_for_application(&mut self, application: &Application) -> Vec<InstanceType> {
+        for task in application.tasks.iter() {}
+    }
 }
