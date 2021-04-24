@@ -1,3 +1,5 @@
+use std::time::Instant;
+
 use mist::vdb12::Context;
 use mist::{AlgorithmContext, Mist};
 
@@ -6,7 +8,7 @@ fn main() {
     std::env::set_var("RUST_LOG", "info");
 
     // Create simulator instance.
-    let mut mist = Mist::new();
+    let mut mist = Mist::new(Instant::now());
 
     // Set maximum number of steps.
     mist.with_max_steps(500);
