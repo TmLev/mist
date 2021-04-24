@@ -2,6 +2,7 @@ use std::time::Instant;
 
 use crate::vdb12::{Application, Cost, Utilisation};
 
+#[derive(Debug, Clone)]
 pub struct Metrics {
     pub num_missed_deadlines: usize,
 }
@@ -45,7 +46,7 @@ impl Galactus {
         });
     }
 
-    pub fn current_utilisation(&mut self, now: Instane, level: Utilisation) {
+    pub fn current_utilisation(&mut self, now: Instant, level: Utilisation) {
         log::info!("Current utilisation level is ~{}%", level.round());
         self.utilisation_levels.push(Record {
             time: now,
@@ -53,7 +54,7 @@ impl Galactus {
         });
     }
 
-    pub fn metrics(&mut self) -> Metrics {
+    pub fn metrics(&self) -> Metrics {
         Metrics {
             num_missed_deadlines: self.missed_deadline_applications.len(),
         }
