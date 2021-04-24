@@ -38,11 +38,11 @@ impl PrivateScheduler {
     pub fn try_schedule(&mut self, application: Application) -> bool {
         let instance_types = self.instance_types_for_application(&application);
 
-        let cpu = instance_types
+        let cpu: u32 = instance_types
             .iter()
             .map(|instance_type| instance_type.vm.cpu)
             .sum();
-        let mem = instance_types
+        let mem: u32 = instance_types
             .iter()
             .map(|instance_type| instance_type.vm.mem)
             .sum();
@@ -58,6 +58,6 @@ impl PrivateScheduler {
     }
 
     fn instance_types_for_application(&mut self, application: &Application) -> Vec<InstanceType> {
-        for task in application.tasks.iter() {}
+        vec![]
     }
 }
