@@ -1,4 +1,4 @@
-use std::time::Instant;
+use std::{cell::RefCell, rc::Rc, time::Instant};
 
 use uuid::Uuid;
 
@@ -38,7 +38,7 @@ pub struct HybridScheduler {
     public_scheduler: PublicScheduler,
 
     /// Metrics watcher.
-    galactus: Galactus,
+    galactus: Rc<RefCell<Galactus>>,
 }
 
 impl HybridScheduler {
@@ -50,6 +50,8 @@ impl HybridScheduler {
 
         private_scheduler: PrivateScheduler,
         public_scheduler: PublicScheduler,
+
+        galactus: Rc<RefCell<Galactus>>,
     ) -> Self {
         Self {
             now,
@@ -61,7 +63,7 @@ impl HybridScheduler {
             private_scheduler,
             public_scheduler,
 
-            galactus: Galactus::new(),
+            galactus,
         }
     }
 
@@ -132,7 +134,10 @@ impl HybridScheduler {
                     .public_scheduler
                     .cheapest_public_provider(&unfeasible, self.now);
                 match cheapest_public_provider {
-                    None => self.galactus.missed_deadline(self.now, unfeasible),
+                    None => self
+                        .galactus
+                        .borrow_mut()
+                        .missed_deadline(self.now, unfeasible),
                     Some(uuid) => self.public_scheduler.schedule_on(unfeasible, uuid),
                 }
             }
@@ -151,7 +156,9 @@ impl HybridScheduler {
                 match next_after_unfeasible {
                     None => {
                         let unfeasible = self.remove_application_from_queue(unfeasible_uuid);
-                        self.galactus.missed_deadline(self.now, unfeasible);
+                        self.galactus
+                            .borrow_mut()
+                            .missed_deadline(self.now, unfeasible);
                     }
                     Some(index) => {
                         let cheapest_application: Option<&Application> = None;
@@ -160,7 +167,9 @@ impl HybridScheduler {
                             None => {
                                 let unfeasible =
                                     self.remove_application_from_queue(unfeasible_uuid);
-                                self.galactus.missed_deadline(self.now, unfeasible);
+                                self.galactus
+                                    .borrow_mut()
+                                    .missed_deadline(self.now, unfeasible);
                             }
                             Some(application) => {
                                 let application =

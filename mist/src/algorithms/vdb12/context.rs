@@ -1,14 +1,17 @@
+use std::{cell::RefCell, rc::Rc};
+
 use stakker::{actor, ret_nop, ActorOwn, Stakker};
 
 use crate::utils::navigation;
 use crate::vdb12::{
-    Customer, HybridScheduler, PrivateScheduler, PublicProvider, PublicScheduler, ServiceProvider,
-    SortingPolicy, UnfeasiblePolicy,
+    Customer, Galactus, HybridScheduler, Metrics, PrivateScheduler, PublicProvider,
+    PublicScheduler, ServiceProvider, SortingPolicy, UnfeasiblePolicy,
 };
 
 pub struct Context {
     service_provider: ActorOwn<ServiceProvider>,
     customers: Vec<ActorOwn<Customer>>,
+    galactus: Rc<RefCell<Galactus>>,
 }
 
 impl Context {
@@ -27,6 +30,9 @@ impl Context {
         let private_scheduler =
             PrivateScheduler::from_file(instance_types_dir.join("private.json")).unwrap();
 
+        // Galactus
+        let galactus = Rc::new(RefCell::new(Galactus::new()));
+
         // Hybrid scheduler & service provider.
         let hybrid_scheduler = HybridScheduler::new(
             core.now(),
@@ -34,6 +40,7 @@ impl Context {
             UnfeasiblePolicy::UnfeasibleToPublic,
             private_scheduler,
             public_scheduler,
+            galactus.clone(),
         );
         let service_provider = actor!(core, ServiceProvider::init(hybrid_scheduler), ret_nop!());
 
@@ -47,6 +54,11 @@ impl Context {
         Self {
             service_provider,
             customers,
+            galactus: galactus.clone(),
         }
+    }
+
+    pub fn metrics(&self) -> Metrics {
+        self.galactus.as_ref().borrow().metrics()
     }
 }
