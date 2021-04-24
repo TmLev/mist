@@ -1,12 +1,13 @@
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use chrono::Utc;
 
 use stakker::{after, call, stop, Actor, CX};
 
-use crate::vdb12::{Application, Deadline, ServiceProvider, Task, Vm};
+use crate::vdb12::{Application, ServiceProvider, Task, Vm};
 
 pub struct Customer {
+    start_time: Instant,
     service_provider: Actor<ServiceProvider>,
     num_total_sends: usize,
     num_scheduled_sends: usize,
@@ -14,20 +15,23 @@ pub struct Customer {
 
 impl Customer {
     pub fn init(cx: CX![], service_provider: Actor<ServiceProvider>) -> Option<Self> {
+        log::info!("Initialising");
+
         // Schedule first request.
         call!([cx], schedule_next_request());
 
         Some(Self {
+            start_time: cx.now(),
             service_provider,
-            num_total_sends: 2, // TODO(TmLev): randomize.
+            num_total_sends: 2, // TODO(TmLev): customize (with closure?).
             num_scheduled_sends: 0,
         })
     }
 
     fn schedule_next_request(&mut self, cx: CX![]) {
         if self.num_total_sends > 0 {
-            // TODO(TmLev): randomize.
-            let send_interval = Duration::new(100, 0);
+            // TODO(TmLev): customize (with closure?).
+            let send_interval = Duration::new(10, 0);
             after!(send_interval, [cx], send_applications());
 
             self.num_total_sends -= 1;
@@ -42,7 +46,10 @@ impl Customer {
     pub fn send_applications(&mut self, cx: CX![]) {
         let applications = self.generate_applications();
 
-        log::info!("Sending applications at {:?}", cx.now());
+        log::info!(
+            "[T {}] Sending applications",
+            (cx.now() - self.start_time).as_secs()
+        );
 
         // Send applications to service provider.
         call!([self.service_provider], customer_request(applications));
