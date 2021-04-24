@@ -54,7 +54,7 @@ impl Context {
         Self {
             service_provider,
             customers,
-            galactus: galactus.clone(),
+            galactus,
         }
     }
 
