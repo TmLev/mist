@@ -85,4 +85,9 @@ impl Mist {
 
         log::info!("Stopping simulation");
     }
+
+    /// Get algorithm context back.
+    pub fn get_algorithm_context(&mut self) -> Option<AlgorithmContext> {
+        self.algorithm_context.take()
+    }
 }
