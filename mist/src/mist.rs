@@ -21,7 +21,7 @@ pub struct Mist {
 }
 
 impl Mist {
-    pub fn new() -> Self {
+    pub fn new(simulation_start_time: Instant) -> Self {
         // TODO(TmLev): format simulation time & current step.
         env_logger::builder()
             .format(|buf, record| {
@@ -36,7 +36,7 @@ impl Mist {
             .init();
 
         Self {
-            core: Stakker::new(Instant::now()),
+            core: Stakker::new(simulation_start_time),
             current_step: 0,
             max_steps: None,
             algorithm_context: None,
