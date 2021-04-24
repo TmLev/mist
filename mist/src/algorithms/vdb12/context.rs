@@ -59,6 +59,6 @@ impl Context {
     }
 
     pub fn metrics(&self) -> Metrics {
-        self.galactus.as_ref().borrow().metrics()
+        self.galactus.borrow().metrics()
     }
 }
