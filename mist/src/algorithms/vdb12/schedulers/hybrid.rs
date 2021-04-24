@@ -117,7 +117,7 @@ impl HybridScheduler {
         let uuid = candidate.uuid();
         log::debug!("Trying to schedule {} on private", uuid);
 
-        if self.private_scheduler.schedule(candidate) {
+        if self.private_scheduler.try_schedule(candidate) {
             self.remove_application_from_queue(uuid);
         }
     }
@@ -132,7 +132,7 @@ impl HybridScheduler {
                     .public_scheduler
                     .cheapest_public_provider(&unfeasible, self.now);
                 match cheapest_public_provider {
-                    None => self.galactus.missed_deadline(unfeasible),
+                    None => self.galactus.missed_deadline(self.now, unfeasible),
                     Some(uuid) => self.public_scheduler.schedule_on(unfeasible, uuid),
                 }
             }
@@ -151,7 +151,7 @@ impl HybridScheduler {
                 match next_after_unfeasible {
                     None => {
                         let unfeasible = self.remove_application_from_queue(unfeasible_uuid);
-                        self.galactus.missed_deadline(unfeasible);
+                        self.galactus.missed_deadline(self.now, unfeasible);
                     }
                     Some(index) => {
                         let cheapest_application: Option<&Application> = None;
@@ -160,7 +160,7 @@ impl HybridScheduler {
                             None => {
                                 let unfeasible =
                                     self.remove_application_from_queue(unfeasible_uuid);
-                                self.galactus.missed_deadline(unfeasible);
+                                self.galactus.missed_deadline(self.now, unfeasible);
                             }
                             Some(application) => {
                                 let application =
