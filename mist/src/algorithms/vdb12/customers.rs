@@ -1,10 +1,8 @@
 use std::time::{Duration, Instant};
 
-use chrono::Utc;
-
 use stakker::{after, call, stop, Actor, CX};
 
-use crate::vdb12::{Application, ServiceProvider, Task, Vm};
+use crate::vdb12::{Application, ServiceProvider};
 
 pub struct Customer {
     start_time: Instant,
@@ -23,7 +21,7 @@ impl Customer {
         Some(Self {
             start_time: cx.now(),
             service_provider,
-            num_total_sends: 2, // TODO(TmLev): customize (with closure?).
+            num_total_sends: 20, // TODO(TmLev): customize (with closure?).
             num_scheduled_sends: 0,
         })
     }
@@ -47,8 +45,9 @@ impl Customer {
         let applications = self.generate_applications();
 
         log::info!(
-            "[T {}] Sending applications",
-            (cx.now() - self.start_time).as_secs()
+            "[T {}] Sending applications {:?}",
+            (cx.now() - self.start_time).as_secs(),
+            applications
         );
 
         // Send applications to service provider.
@@ -60,11 +59,6 @@ impl Customer {
     }
 
     fn generate_applications(&self) -> Vec<Application> {
-        vec![Application::new(
-            vec![Task {
-                minimal_vm_requirements: Vm { cpu: 1, mem: 1000 },
-            }],
-            Utc::now(),
-        )]
+        vec![Application::generate()]
     }
 }
