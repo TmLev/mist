@@ -1,15 +1,12 @@
 use std::time::Duration;
 
 use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-
 use rand::{thread_rng, Rng};
+use uuid::Uuid;
 
 use crate::vdb12::Vm;
 
 #[derive(Debug, Clone)]
-#[derive(Deserialize, Serialize)]
 pub struct Task {
     pub minimal_vm_requirements: Vm,
     pub runtime: Duration,
@@ -28,7 +25,6 @@ impl Task {
 pub type Deadline = DateTime<Utc>;
 
 #[derive(Debug, Clone)]
-#[derive(Deserialize, Serialize)]
 pub struct Application {
     /// Bag of tasks.
     pub tasks: Vec<Task>,
@@ -70,16 +66,15 @@ impl Application {
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Accessors
+
     pub fn uuid(&self) -> Uuid {
         self.uuid
     }
 
     pub fn deadline(&self) -> Deadline {
         self.deadline
-    }
-
-    pub fn to_json(&self) -> String {
-        serde_json::to_string_pretty(&self).unwrap()
     }
 }
 
