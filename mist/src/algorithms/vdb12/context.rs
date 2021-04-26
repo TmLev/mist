@@ -60,6 +60,6 @@ impl Context {
     }
 
     pub fn metrics(&self) -> Metrics {
-        self.metrics.borrow().metrics()
+        self.metrics.borrow().clone()
     }
 }

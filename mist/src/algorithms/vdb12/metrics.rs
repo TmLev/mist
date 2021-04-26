@@ -2,11 +2,13 @@ use std::time::Instant;
 
 use crate::vdb12::{Application, Cost, Utilisation};
 
+#[derive(Debug, Clone)]
 struct Record<T> {
     pub time: Instant,
     pub value: T,
 }
 
+#[derive(Debug, Clone)]
 pub struct Metrics {
     missed_deadline_applications: Vec<Record<Application>>,
     public_scheduling_costs: Vec<Record<Cost>>,
