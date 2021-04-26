@@ -8,6 +8,7 @@ use crate::vdb12::{
     PublicScheduler, ServiceProvider, SortingPolicy, UnfeasiblePolicy,
 };
 
+#[allow(dead_code)]
 pub struct Context {
     service_provider: ActorOwn<ServiceProvider>,
     customers: Vec<ActorOwn<Customer>>,

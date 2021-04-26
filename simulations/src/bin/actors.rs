@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+
 use std::time::{Duration, Instant};
 
 use stakker::{actor, after, call, ret, ret_nop, ret_some_to, Actor, Ret, Stakker, CX};
