@@ -17,10 +17,8 @@ jobs:
           toolchain: stable
           override: true
 
-      - name: Allow dead code
-        run: export RUSTFLAGS="-A dead_code"
-
       - name: Run cargo check
         uses: actions-rs/cargo@v1
         with:
           command: check
+          args: ">/dev/null 2>&1"
