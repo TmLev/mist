@@ -6,10 +6,8 @@ use log;
 
 use stakker::Stakker;
 
-use crate::AlgorithmContext;
-
 /// The heart of the simulator.
-pub struct Mist {
+pub struct Mist<AlgorithmContext> {
     /// Main event loop.
     core: Stakker,
     /// Current step of the simulation.
@@ -20,7 +18,7 @@ pub struct Mist {
     algorithm_context: Option<AlgorithmContext>,
 }
 
-impl Mist {
+impl<AlgorithmContext> Mist<AlgorithmContext> {
     pub fn new(simulation_start_time: Instant) -> Self {
         // TODO(TmLev): format simulation time & current step.
         env_logger::builder()
