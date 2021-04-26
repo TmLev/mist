@@ -31,8 +31,8 @@ impl Context {
         let private_scheduler =
             PrivateScheduler::from_file(instance_types_dir.join("private.json")).unwrap();
 
-        // Galactus
-        let galactus = Rc::new(RefCell::new(Metrics::new()));
+        // Metrics.
+        let metrics = Rc::new(RefCell::new(Metrics::new()));
 
         // Hybrid scheduler & service provider.
         let hybrid_scheduler = HybridScheduler::new(
@@ -41,7 +41,7 @@ impl Context {
             UnfeasiblePolicy::UnfeasibleToPublic,
             private_scheduler,
             public_scheduler,
-            galactus.clone(),
+            metrics.clone(),
         );
         let service_provider = actor!(core, ServiceProvider::init(hybrid_scheduler), ret_nop!());
 
@@ -55,7 +55,7 @@ impl Context {
         Self {
             service_provider,
             customers,
-            metrics: galactus,
+            metrics,
         }
     }
 
