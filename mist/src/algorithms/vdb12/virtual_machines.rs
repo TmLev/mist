@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-/// `Vm` reflects virtual machine that runs applications or services.
+/// Reflects virtual machine that runs applications or services.
 #[derive(Debug, Clone)]
 #[derive(Ord, PartialOrd, Eq, PartialEq)]
 #[derive(Deserialize, Serialize)]
@@ -16,16 +16,17 @@ pub type Price = f64;
 pub type BillingInterval = f64;
 pub type Cost = f64; // price * billing_interval
 
+/// VM available for renting in the public cloud.
 #[derive(Debug, Clone)]
 #[derive(Deserialize, Serialize)]
 pub struct InstanceType {
-    // VM characteristics
+    /// VM characteristics.
     pub vm: Vm,
 
-    // Price per `billing_period` in USD
+    /// Price per `billing_period` in USD.
     pub price: Price,
 
-    // Interval of time between billings in seconds
+    /// Interval of time between billings in seconds.
     pub billing_interval: BillingInterval,
 }
 
