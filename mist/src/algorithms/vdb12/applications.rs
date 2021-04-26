@@ -13,7 +13,7 @@ pub struct Task {
 }
 
 impl Task {
-    pub fn gen(base_runtime: Duration) -> Self {
+    pub fn generate(base_runtime: Duration) -> Self {
         Self {
             // TODO(TmLev): customize.
             minimal_vm_requirements: Vm { cpu: 1, mem: 1000 },
@@ -49,7 +49,7 @@ impl Application {
         self
     }
 
-    pub fn gen() -> Self {
+    pub fn generate() -> Self {
         let num_tasks = thread_rng().gen_range(1..10);
         log::debug!("Generating new application with {} tasks", num_tasks);
 
@@ -59,7 +59,9 @@ impl Application {
 
         Self {
             uuid: Uuid::new_v4(),
-            tasks: (0..num_tasks).map(|_| Task::gen(base_runtime)).collect(),
+            tasks: (0..num_tasks)
+                .map(|_| Task::generate(base_runtime))
+                .collect(),
             deadline: Utc::now(), // FIXME(TmLev): wrong.
         }
     }

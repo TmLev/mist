@@ -59,6 +59,6 @@ impl Customer {
     }
 
     fn generate_applications(&self) -> Vec<Application> {
-        vec![Application::gen()]
+        vec![Application::generate()]
     }
 }
