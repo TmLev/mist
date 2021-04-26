@@ -9,7 +9,7 @@ mod virtual_machines;
 pub use applications::{Application, Deadline, Task};
 pub use context::Context;
 pub use customers::Customer;
-pub use metrics::{Galactus, Metrics};
+pub use metrics::Metrics;
 pub use providers::{
     public::{PublicProvider, ScheduleCost},
     service::ServiceProvider,

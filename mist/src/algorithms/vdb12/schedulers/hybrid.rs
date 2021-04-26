@@ -2,7 +2,7 @@ use std::{cell::RefCell, rc::Rc, time::Instant};
 
 use uuid::Uuid;
 
-use crate::vdb12::{Application, Galactus, PrivateScheduler, PublicScheduler};
+use crate::vdb12::{Application, Metrics, PrivateScheduler, PublicScheduler};
 
 /// Sorting policy determines in what order applications waiting in queue should be scheduled.
 pub enum SortingPolicy {
@@ -38,7 +38,7 @@ pub struct HybridScheduler {
     public_scheduler: PublicScheduler,
 
     /// Metrics watcher.
-    galactus: Rc<RefCell<Galactus>>,
+    metrics: Rc<RefCell<Metrics>>,
 }
 
 impl HybridScheduler {
@@ -51,7 +51,7 @@ impl HybridScheduler {
         private_scheduler: PrivateScheduler,
         public_scheduler: PublicScheduler,
 
-        galactus: Rc<RefCell<Galactus>>,
+        metrics: Rc<RefCell<Metrics>>,
     ) -> Self {
         Self {
             now,
@@ -63,7 +63,7 @@ impl HybridScheduler {
             private_scheduler,
             public_scheduler,
 
-            galactus,
+            metrics,
         }
     }
 
@@ -135,7 +135,7 @@ impl HybridScheduler {
                     .cheapest_public_provider(&unfeasible, self.now);
                 match cheapest_public_provider {
                     None => self
-                        .galactus
+                        .metrics
                         .borrow_mut()
                         .missed_deadline(self.now, unfeasible),
                     Some(uuid) => self.public_scheduler.schedule_on(unfeasible, uuid),
@@ -156,7 +156,7 @@ impl HybridScheduler {
                 match next_after_unfeasible {
                     None => {
                         let unfeasible = self.remove_application_from_queue(unfeasible_uuid);
-                        self.galactus
+                        self.metrics
                             .borrow_mut()
                             .missed_deadline(self.now, unfeasible);
                     }
@@ -167,7 +167,7 @@ impl HybridScheduler {
                             None => {
                                 let unfeasible =
                                     self.remove_application_from_queue(unfeasible_uuid);
-                                self.galactus
+                                self.metrics
                                     .borrow_mut()
                                     .missed_deadline(self.now, unfeasible);
                             }
