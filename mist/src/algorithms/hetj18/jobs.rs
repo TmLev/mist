@@ -1,7 +1,5 @@
 use chrono::{DateTime, Utc};
 
-use crate::hetj18::Resource;
-
 pub struct Task {}
 
 pub type Deadline = DateTime<Utc>;
@@ -11,4 +9,8 @@ pub struct Job {
     deadline: Deadline,
 }
 
-impl Job {}
+impl Job {
+    pub fn generate() -> Self {
+        todo!()
+    }
+}

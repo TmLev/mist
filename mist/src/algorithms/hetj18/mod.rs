@@ -5,6 +5,6 @@ mod predictions;
 mod resources;
 mod users;
 
-pub use jobs::{Intensity, Job};
+pub use jobs::{Deadline, Job, Task};
 pub use nodes::Node;
 pub use resources::Resource;
