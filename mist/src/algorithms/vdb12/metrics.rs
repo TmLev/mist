@@ -2,23 +2,18 @@ use std::time::Instant;
 
 use crate::vdb12::{Application, Cost, Utilisation};
 
-#[derive(Debug, Clone)]
-pub struct Metrics {
-    pub num_missed_deadlines: usize,
-}
-
 struct Record<T> {
     pub time: Instant,
     pub value: T,
 }
 
-pub struct Galactus {
+pub struct Metrics {
     missed_deadline_applications: Vec<Record<Application>>,
     public_scheduling_costs: Vec<Record<Cost>>,
     utilisation_levels: Vec<Record<Utilisation>>,
 }
 
-impl Galactus {
+impl Metrics {
     pub fn new() -> Self {
         Self {
             missed_deadline_applications: Vec::new(),
@@ -54,9 +49,7 @@ impl Galactus {
         });
     }
 
-    pub fn metrics(&self) -> Metrics {
-        Metrics {
-            num_missed_deadlines: self.missed_deadline_applications.len(),
-        }
+    pub fn num_missed_deadlines(&self) -> usize {
+        self.missed_deadline_applications.len()
     }
 }
