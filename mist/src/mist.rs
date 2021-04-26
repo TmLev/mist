@@ -8,7 +8,7 @@ use stakker::Stakker;
 
 /// The heart of the simulator.
 pub struct Mist<AlgorithmContext> {
-    /// Main event loop.
+    /// Actor model core.
     core: Stakker,
     /// Current step of the simulation.
     current_step: usize,
