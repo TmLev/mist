@@ -1,12 +1,14 @@
-use chrono::{DateTime, Utc};
 use std::cmp::Ordering;
-use std::ops::Deref;
+
+use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
+#[derive(Debug, Clone)]
 pub struct Task {}
 
 pub type Deadline = DateTime<Utc>;
 
+#[derive(Debug, Clone)]
 pub struct Job {
     uuid: Uuid,
     tasks: Vec<Task>,
