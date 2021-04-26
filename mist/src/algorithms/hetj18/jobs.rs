@@ -18,7 +18,14 @@ impl Job {
         todo!()
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Accessors.
+
     pub fn uuid(&self) -> Uuid {
         self.uuid
+    }
+
+    pub fn deadline(&self) -> Deadline {
+        self.deadline
     }
 }
