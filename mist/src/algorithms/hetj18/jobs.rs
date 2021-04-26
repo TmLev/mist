@@ -1,10 +1,9 @@
-pub enum Intensity {
-    Io,
-    Cpu,
-}
+use crate::hetj18::Resource;
+
+pub struct Task {}
 
 pub struct Job {
-    intensity: Intensity,
+    intensity: Resource,
 }
 
 impl Job {}
