@@ -1,6 +1,9 @@
-use std::error::Error;
-use std::path::Path;
-use std::time::Instant;
+use std::{
+    cmp::max,
+    error::Error,
+    path::Path,
+    time::{Duration, Instant},
+};
 
 use uuid::Uuid;
 
@@ -42,19 +45,18 @@ impl PublicProvider {
         let mut total = 0.0;
 
         for task in application.tasks.iter() {
-            // FIXME(TmLev):
-            //   1. Check if `task` can meet deadline on `instance_type`.
-            //   2. `price` should be multiplied by execution time.
-            //      Requires access to simulation time.
+            // FIXME(TmLev): Check if `task` can meet deadline on `instance_type`.
             let cheapest_instance_type = self
                 .instance_types
                 .iter()
                 .filter(|&instance_type| instance_type.vm >= task.minimal_vm_requirements)
                 .min_by(|&left, &right| left.price.partial_cmp(&right.price).unwrap());
 
+            let runtime = max(Duration::from_secs(60), task.runtime);
+
             total += match cheapest_instance_type {
                 None => return ScheduleCost::Impossible,
-                Some(instance_type) => instance_type.price,
+                Some(instance_type) => instance_type.price * runtime,
             };
         }
 
