@@ -56,7 +56,7 @@ impl PublicProvider {
 
             total += match cheapest_instance_type {
                 None => return ScheduleCost::Impossible,
-                Some(instance_type) => instance_type.price * runtime,
+                Some(instance_type) => instance_type.price * runtime.as_secs_f64(),
             };
         }
 
