@@ -46,7 +46,10 @@ impl PublicProvider {
             let cheapest_instance_type = self
                 .instance_types
                 .iter()
-                .filter(|&instance_type| instance_type.characteristics >= task.requirements)
+                .filter(|&instance_type| {
+                    instance_type.characteristics >= task.requirements
+                        && application.deadline() >= now + task.runtime
+                })
                 .min_by(|&left, &right| left.price.partial_cmp(&right.price).unwrap());
 
             let runtime = max(Duration::from_secs(60), task.runtime);

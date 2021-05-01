@@ -1,10 +1,11 @@
-use chrono::{DateTime, Utc};
+use std::time::Instant;
+
 use uuid::Uuid;
 
 #[derive(Debug, Clone)]
 pub struct Task {}
 
-pub type Deadline = DateTime<Utc>;
+pub type Deadline = Instant;
 
 #[derive(Debug, Clone)]
 pub struct Job {

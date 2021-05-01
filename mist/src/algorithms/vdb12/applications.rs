@@ -1,6 +1,5 @@
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
-use chrono::{DateTime, Utc};
 use rand::{thread_rng, Rng};
 use uuid::Uuid;
 
@@ -22,7 +21,7 @@ impl Task {
     }
 }
 
-pub type Deadline = DateTime<Utc>;
+pub type Deadline = Instant;
 
 #[derive(Debug, Clone)]
 pub struct Application {
@@ -30,7 +29,8 @@ pub struct Application {
     pub tasks: Vec<Task>,
     /// Way to differentiate applications.
     uuid: Uuid,
-    /// Deadline to meet. May be used as a key in the sorted data structures.
+    /// Deadline to meet.
+    /// May be used as a key to sort containers with applications.
     deadline: Deadline,
 }
 
@@ -49,7 +49,7 @@ impl Application {
         self
     }
 
-    pub fn generate() -> Self {
+    pub fn generate(now: Instant) -> Self {
         let num_tasks = thread_rng().gen_range(1..10);
         log::debug!("Generating new application with {} tasks", num_tasks);
 
@@ -62,12 +62,9 @@ impl Application {
             tasks: (0..num_tasks)
                 .map(|_| Task::generate(base_runtime))
                 .collect(),
-            deadline: Utc::now(), // FIXME(TmLev): wrong.
+            deadline: now + base_runtime,
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Accessors
 
     pub fn uuid(&self) -> Uuid {
         self.uuid
