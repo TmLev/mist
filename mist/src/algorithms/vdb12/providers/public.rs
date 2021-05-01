@@ -9,11 +9,6 @@ use uuid::Uuid;
 
 use crate::vdb12::{Application, Cost, InstanceType};
 
-pub enum ScheduleCost {
-    Impossible,
-    Possible(Cost),
-}
-
 #[derive(Debug, Clone)]
 pub struct PublicProvider {
     uuid: Uuid,
@@ -41,7 +36,9 @@ impl PublicProvider {
         self.uuid
     }
 
-    pub fn cost(&self, application: &Application, now: Instant) -> ScheduleCost {
+    /// Determine the minimum possible cost for scheduling the `application`.
+    /// Returns `None` if deadline can not be met.
+    pub fn cost(&self, application: &Application, now: Instant) -> Option<Cost> {
         let mut total = 0.0;
 
         for task in application.tasks.iter() {
@@ -55,11 +52,11 @@ impl PublicProvider {
             let runtime = max(Duration::from_secs(60), task.runtime);
 
             total += match cheapest_instance_type {
-                None => return ScheduleCost::Impossible,
+                None => return None,
                 Some(instance_type) => instance_type.price * runtime.as_secs_f64(),
             };
         }
 
-        ScheduleCost::Possible(total)
+        Some(total)
     }
 }

@@ -2,7 +2,7 @@ use std::time::Instant;
 
 use uuid::Uuid;
 
-use crate::vdb12::{Application, PublicProvider, ScheduleCost};
+use crate::vdb12::{Application, PublicProvider};
 
 pub struct PublicScheduler {
     public_providers: Vec<PublicProvider>,
@@ -21,8 +21,8 @@ impl PublicScheduler {
         self.public_providers
             .iter_mut()
             .filter_map(|provider| match provider.cost(application, now) {
-                ScheduleCost::Impossible => None,
-                ScheduleCost::Possible(cost) => Some((provider, cost)),
+                None => None,
+                Some(cost) => Some((provider, cost)),
             })
             .min_by(|(_, left), (_, right)| left.partial_cmp(right).unwrap())
             .map(|(provider, _)| provider.uuid())

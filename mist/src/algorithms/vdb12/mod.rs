@@ -10,10 +10,7 @@ pub use applications::{Application, Deadline, Task};
 pub use context::Context;
 pub use customers::Customer;
 pub use metrics::Metrics;
-pub use providers::{
-    public::{PublicProvider, ScheduleCost},
-    service::ServiceProvider,
-};
+pub use providers::{public::PublicProvider, service::ServiceProvider};
 pub use schedulers::{
     hybrid::{HybridScheduler, SortingPolicy, UnfeasiblePolicy},
     private::{PrivateScheduler, Utilisation},
