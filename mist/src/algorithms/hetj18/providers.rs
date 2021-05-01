@@ -1,4 +1,4 @@
-use stakker::{after, call, CX};
+use stakker::CX;
 
 use crate::hetj18::{Job, PrivatePool, PublicPool};
 
@@ -20,7 +20,7 @@ impl ServiceProvider {
         })
     }
 
-    pub fn user_request(&mut self, cx: CX![], mut jobs: Vec<Job>) {
+    pub fn user_request(&mut self, _cx: CX![], mut jobs: Vec<Job>) {
         log::info!(
             "Received user request, job uuids: {}",
             jobs.iter()
