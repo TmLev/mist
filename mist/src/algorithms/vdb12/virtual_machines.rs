@@ -20,7 +20,7 @@ pub type Cost = f64; // price * billing_interval
 #[derive(Debug, Clone)]
 #[derive(Deserialize, Serialize)]
 pub struct InstanceType {
-    /// VM characteristics.
+    /// Actual characteristics.
     pub characteristics: VirtualMachine,
 
     /// Price per `billing_period` in USD.
