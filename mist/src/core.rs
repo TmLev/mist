@@ -10,6 +10,8 @@ use stakker::Stakker;
 pub struct Mist<AlgorithmContext> {
     /// Actor model core.
     amc: Stakker,
+    /// Current instant of the simulation.
+    now: Instant,
     /// Current step of the simulation.
     current_step: usize,
     /// Optional limit on the simulation steps.
@@ -35,6 +37,7 @@ impl<AlgorithmContext> Mist<AlgorithmContext> {
 
         Self {
             amc: Stakker::new(simulation_start_time),
+            now: simulation_start_time,
             current_step: 0,
             max_steps: None,
             algorithm_context: None,
@@ -57,31 +60,38 @@ impl<AlgorithmContext> Mist<AlgorithmContext> {
 
     pub fn run(&mut self) {
         log::info!("Starting simulation");
+        while self.runnable() {
+            self.step();
+        }
+        log::info!("Stopping simulation");
+    }
 
-        let stakker = &mut self.amc;
-        let mut now = Instant::now();
-        stakker.run(now, false);
+    fn runnable(&mut self) -> bool {
+        self.amc.not_shutdown() && !self.reached_max_steps()
+    }
 
-        while stakker.not_shutdown() {
-            now += stakker.next_wait_max(
-                now,
+    fn step(&mut self) {
+        // Advance time only after the first run.
+        if self.current_step > 0 {
+            self.now += self.amc.next_wait_max(
+                self.now,
                 Duration::from_secs(10), // TODO(TmLev): customize.
                 false,
             );
-            stakker.run(now, false);
-
-            self.current_step += 1;
-            let reached_max_steps = match self.max_steps {
-                None => false,
-                Some(max) => self.current_step > max,
-            };
-            if reached_max_steps {
-                log::info!("Reached maximum number of steps");
-                break;
-            }
         }
 
-        log::info!("Stopping simulation");
+        self.amc.run(self.now, false);
+        self.current_step += 1;
+    }
+
+    fn reached_max_steps(&self) -> bool {
+        match self.max_steps {
+            None => false,
+            Some(max) => {
+                log::info!("Reached maximum number of steps");
+                self.current_step > max
+            }
+        }
     }
 
     /// Get algorithm context back.
