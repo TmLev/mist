@@ -12,8 +12,8 @@ fn main() {
     // Set maximum number of steps.
     mist.with_max_steps(500);
 
-    // Choose algorithm and access Mist core for creating context.
-    let ctx = vdb12::Context::new(mist.core());
+    // Choose algorithm and access actor model core for creating context.
+    let ctx = vdb12::Context::new(mist.actor_model_core());
 
     // Provide algorithm context.
     mist.with_algorithm_context(ctx);

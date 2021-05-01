@@ -9,7 +9,7 @@ use stakker::Stakker;
 /// The heart of the simulator.
 pub struct Mist<AlgorithmContext> {
     /// Actor model core.
-    core: Stakker,
+    amc: Stakker,
     /// Current step of the simulation.
     current_step: usize,
     /// Optional limit on the simulation steps.
@@ -34,15 +34,15 @@ impl<AlgorithmContext> Mist<AlgorithmContext> {
             .init();
 
         Self {
-            core: Stakker::new(simulation_start_time),
+            amc: Stakker::new(simulation_start_time),
             current_step: 0,
             max_steps: None,
             algorithm_context: None,
         }
     }
 
-    pub fn core(&mut self) -> &mut Stakker {
-        &mut self.core
+    pub fn actor_model_core(&mut self) -> &mut Stakker {
+        &mut self.amc
     }
 
     pub fn with_max_steps(&mut self, s: usize) -> &mut Self {
@@ -58,7 +58,7 @@ impl<AlgorithmContext> Mist<AlgorithmContext> {
     pub fn run(&mut self) {
         log::info!("Starting simulation");
 
-        let stakker = &mut self.core;
+        let stakker = &mut self.amc;
         let mut now = Instant::now();
         stakker.run(now, false);
 

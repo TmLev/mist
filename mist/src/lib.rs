@@ -1,6 +1,6 @@
 // Simulator heart
-mod mist;
-pub use crate::mist::Mist;
+mod core;
+pub use crate::core::Mist;
 
 // Algorithms
 mod algorithms;

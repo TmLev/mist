@@ -16,7 +16,7 @@ pub struct Context {
 }
 
 impl Context {
-    pub fn new(core: &mut Stakker) -> Self {
+    pub fn new(amc: &mut Stakker) -> Self {
         // Navigate directory with instance types.
         let instance_types_dir = navigation::data_dir().join("vdb12/instance-types");
 
@@ -36,18 +36,18 @@ impl Context {
 
         // Hybrid scheduler & service provider.
         let hybrid_scheduler = HybridScheduler::new(
-            core.now(),
+            amc.now(),
             SortingPolicy::FirstComeFirstServed,
             UnfeasiblePolicy::UnfeasibleToPublic,
             private_scheduler,
             public_scheduler,
             metrics.clone(),
         );
-        let service_provider = actor!(core, ServiceProvider::init(hybrid_scheduler), ret_nop!());
+        let service_provider = actor!(amc, ServiceProvider::init(hybrid_scheduler), ret_nop!());
 
         // Customers.
         let customers = vec![actor!(
-            core,
+            amc,
             Customer::init(service_provider.clone()),
             ret_nop!()
         )];

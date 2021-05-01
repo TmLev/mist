@@ -8,7 +8,7 @@ fn impossible_applications_miss_deadline() {
 
     let mut mist = Mist::new(Instant::now());
 
-    let ctx = vdb12::Context::new(mist.core());
+    let ctx = vdb12::Context::new(mist.actor_model_core());
 
     mist.with_max_steps(100).with_algorithm_context(ctx).run();
 
