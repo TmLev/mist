@@ -40,11 +40,11 @@ impl PrivateScheduler {
 
         let cpu: u32 = instance_types
             .iter()
-            .map(|instance_type| instance_type.vm.cpu)
+            .map(|instance_type| instance_type.characteristics.cpu)
             .sum();
         let mem: u32 = instance_types
             .iter()
-            .map(|instance_type| instance_type.vm.mem)
+            .map(|instance_type| instance_type.characteristics.mem)
             .sum();
 
         if cpu > self.available_cpu || mem > self.available_mem {

@@ -4,11 +4,11 @@ use chrono::{DateTime, Utc};
 use rand::{thread_rng, Rng};
 use uuid::Uuid;
 
-use crate::vdb12::Vm;
+use crate::vdb12::VirtualMachine;
 
 #[derive(Debug, Clone)]
 pub struct Task {
-    pub minimal_vm_requirements: Vm,
+    pub requirements: VirtualMachine,
     pub runtime: Duration,
 }
 
@@ -16,7 +16,7 @@ impl Task {
     pub fn generate(base_runtime: Duration) -> Self {
         Self {
             // TODO(TmLev): customize.
-            minimal_vm_requirements: Vm { cpu: 1, mem: 1000 },
+            requirements: VirtualMachine { cpu: 1, mem: 1000 },
             runtime: base_runtime,
         }
     }

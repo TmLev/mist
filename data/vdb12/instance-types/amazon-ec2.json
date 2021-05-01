@@ -1,6 +1,6 @@
 [
   {
-    "vm": {
+    "characteristics": {
       "cpu": 1,
       "mem": 1700
     },
@@ -8,7 +8,7 @@
     "billing_interval": 3600.0
   },
   {
-    "vm": {
+    "characteristics": {
       "cpu": 4,
       "mem": 7500
     },
@@ -16,7 +16,7 @@
     "billing_interval": 3600.0
   },
   {
-    "vm": {
+    "characteristics": {
       "cpu": 8,
       "mem": 15000
     },
@@ -24,7 +24,7 @@
     "billing_interval": 3600.0
   },
   {
-    "vm": {
+    "characteristics": {
       "cpu": 5,
       "mem": 1700
     },
@@ -32,7 +32,7 @@
     "billing_interval": 3600.0
   },
   {
-    "vm": {
+    "characteristics": {
       "cpu": 20,
       "mem": 7000
     },
@@ -40,7 +40,7 @@
     "billing_interval": 3600.0
   },
   {
-    "vm": {
+    "characteristics": {
       "cpu": 13,
       "mem": 34200
     },
@@ -48,7 +48,7 @@
     "billing_interval": 3600.0
   },
   {
-    "vm": {
+    "characteristics": {
       "cpu": 26,
       "mem": 68400
     },

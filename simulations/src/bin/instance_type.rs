@@ -1,9 +1,9 @@
-use mist::vdb12::{InstanceType, Vm};
+use mist::vdb12::{InstanceType, VirtualMachine};
 
 fn main() {
-    let vm = Vm { cpu: 1, mem: 1700 };
+    let vm = VirtualMachine { cpu: 1, mem: 1700 };
     let it = InstanceType {
-        vm,
+        characteristics: vm,
         price: 0.0085,
         billing_interval: 60.0 * 60.0,
     };

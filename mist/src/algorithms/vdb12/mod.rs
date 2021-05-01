@@ -16,4 +16,4 @@ pub use schedulers::{
     private::{PrivateScheduler, Utilisation},
     public::PublicScheduler,
 };
-pub use virtual_machines::{BillingInterval, Cost, InstanceType, Price, Vm};
+pub use virtual_machines::{BillingInterval, Cost, InstanceType, Price, VirtualMachine};
