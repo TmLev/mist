@@ -9,6 +9,8 @@ use uuid::Uuid;
 
 use crate::vdb12::{Application, Cost, InstanceType};
 
+const MINIMAL_RUNTIME: Duration = Duration::from_secs(60);
+
 #[derive(Debug, Clone)]
 pub struct PublicProvider {
     uuid: Uuid,
@@ -42,7 +44,6 @@ impl PublicProvider {
         let mut total = 0.0;
 
         for task in application.tasks.iter() {
-            // FIXME(TmLev): Check if `task` can meet deadline on `instance_type`.
             let cheapest_instance_type = self
                 .instance_types
                 .iter()
@@ -52,7 +53,10 @@ impl PublicProvider {
                 })
                 .min_by(|&left, &right| left.price.partial_cmp(&right.price).unwrap());
 
-            let runtime = max(Duration::from_secs(60), task.runtime);
+            let runtime = max(
+                MINIMAL_RUNTIME,
+                task.runtime, // FW(TmLev): consider characteristics.
+            );
 
             total += match cheapest_instance_type {
                 None => return None,

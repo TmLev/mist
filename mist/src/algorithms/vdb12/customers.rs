@@ -42,7 +42,7 @@ impl Customer {
     }
 
     pub fn send_applications(&mut self, cx: CX![]) {
-        let applications = self.generate_applications();
+        let applications = self.generate_applications(cx.now());
 
         log::info!(
             "[T {}] Sending applications {:?}",
@@ -58,7 +58,7 @@ impl Customer {
         call!([cx], schedule_next_request());
     }
 
-    fn generate_applications(&self) -> Vec<Application> {
-        vec![Application::generate()]
+    fn generate_applications(&self, now: Instant) -> Vec<Application> {
+        vec![Application::generate(now)]
     }
 }
