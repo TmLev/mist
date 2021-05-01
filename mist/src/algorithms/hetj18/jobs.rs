@@ -1,5 +1,3 @@
-use std::cmp::Ordering;
-
 use chrono::{DateTime, Utc};
 use uuid::Uuid;
 
@@ -19,9 +17,6 @@ impl Job {
     pub fn generate() -> Self {
         todo!()
     }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // Accessors.
 
     pub fn uuid(&self) -> Uuid {
         self.uuid
