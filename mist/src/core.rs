@@ -71,17 +71,19 @@ impl<AlgorithmContext> Mist<AlgorithmContext> {
     }
 
     fn step(&mut self) {
-        // Advance time only after the first run.
         if self.current_step > 0 {
-            self.now += self.amc.next_wait_max(
-                self.now,
-                Duration::from_secs(10), // TODO(TmLev): customize.
-                false,
-            );
+            self.advance_time();
         }
-
         self.amc.run(self.now, false);
         self.current_step += 1;
+    }
+
+    fn advance_time(&mut self) {
+        self.now += self.amc.next_wait_max(
+            self.now,
+            Duration::from_secs(10), // FW(TmLev): customize.
+            false,
+        );
     }
 
     fn reached_max_steps(&self) -> bool {
