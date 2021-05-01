@@ -62,7 +62,7 @@ impl Application {
             tasks: (0..num_tasks)
                 .map(|_| Task::generate(base_runtime))
                 .collect(),
-            deadline: now + base_runtime,
+            deadline: now + base_runtime * thread_rng().gen_range(5..10),
         }
     }
 
