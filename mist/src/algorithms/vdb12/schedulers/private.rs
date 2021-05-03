@@ -54,7 +54,7 @@ impl PrivateScheduler {
         self.available_cpu -= cpu;
         self.available_mem -= mem;
 
-        return true;
+        true
     }
 
     fn instance_types_for_application(&mut self, application: &Application) -> Vec<InstanceType> {

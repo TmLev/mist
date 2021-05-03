@@ -45,8 +45,7 @@ impl ServiceProvider {
     fn try_public_schedule(&mut self, job: &Job) -> bool {
         self.public_cloud
             .iter()
-            .find(|&public_pool| public_pool.try_schedule(job))
-            .is_some()
+            .any(|public_pool| public_pool.try_schedule(job))
     }
 }
 

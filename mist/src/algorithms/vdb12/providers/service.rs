@@ -1,7 +1,5 @@
 use std::time::Duration;
 
-use log;
-
 use stakker::{after, CX};
 
 use crate::vdb12::{Application, HybridScheduler};
@@ -34,7 +32,6 @@ impl ServiceProvider {
         log::info!(
             "Customer request arrived, application uuids: [{}]",
             applications
-                .clone()
                 .iter()
                 .map(|application| application.uuid().to_string())
                 .collect::<Vec<_>>()

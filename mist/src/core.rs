@@ -1,9 +1,6 @@
 use std::io::Write;
 use std::time::{Duration, Instant};
 
-use env_logger;
-use log;
-
 use stakker::Stakker;
 
 /// The heart of the simulator.

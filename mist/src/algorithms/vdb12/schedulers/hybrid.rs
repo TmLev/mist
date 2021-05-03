@@ -104,7 +104,7 @@ impl HybridScheduler {
 
     pub fn scan(&mut self) {
         // TODO(TmLev): this is an example of detecting unfeasible application.
-        if self.application_queue.len() > 0 {
+        if !self.application_queue.is_empty() {
             self.apply_unfeasible_policy(self.application_queue[0].uuid());
         }
     }

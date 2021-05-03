@@ -22,8 +22,8 @@ impl Context {
 
         // Public providers & scheduler.
         let public_providers = vec![
-            PublicProvider::from_file(instance_types_dir.clone().join("go-grid.json")).unwrap(),
-            PublicProvider::from_file(instance_types_dir.clone().join("amazon-ec2.json")).unwrap(),
+            PublicProvider::from_file(instance_types_dir.join("go-grid.json")).unwrap(),
+            PublicProvider::from_file(instance_types_dir.join("amazon-ec2.json")).unwrap(),
         ];
         let public_scheduler = PublicScheduler::new(public_providers);
 
